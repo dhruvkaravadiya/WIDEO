@@ -11,7 +11,7 @@ export default function Login() {
         className="absolute inset-0 object-cover w-full h-full"
       />
       <div className="absolute inset-0 flex items-center  justify-center">
-        <div className="bg-white bg-opacity-20 backdrop-blur-lg gap-4 z-10 sm:w-4/6 md:w-3/6 lg:w-2/6 xl:w-4/12 mx-auto p-6 flex flex-col z-10 rounded-lg">
+        <div className="bg-white bg-opacity-20 backdrop-blur-lg gap-4 sm:w-4/6 md:w-3/6 lg:w-2/6 xl:w-4/12 mx-auto p-6 flex flex-col z-10 rounded-lg">
           <div className="flex flex-col justify-center items-center gap-3">
             <img src={logo} alt="logo" className="w-16 h-16" />
           </div>

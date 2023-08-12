@@ -5,15 +5,16 @@ import MenuNavbar from './components/MenuNavbar';
 import NotFound from './components/NotFound';
 import SignUp from './components/SignUp';
 import Login from './components/Login';
+import Test from './Test';
 function App() {
   return (
     <>
-    <MenuNavbar/>
+    <MenuNavbar />
     {/* <NotFound/> */}
     {/* <SignUp/> */}
     
     {/* <Home/> */}
-    {/* <Test />*/}
+    {/* <Test /> */}
     </>
   );
 }

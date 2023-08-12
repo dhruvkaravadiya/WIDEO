@@ -1,12 +1,16 @@
-import Thumbnail from '../assets/images/thumbnail.jpg';
-export default function VideoCard() {
+import React from 'react';
+
+const VideoCard = ({ video }) => {
   return (
-    <>
-      <div className="flex flex-col hover:cursor-pointer rounded">
-        <img src = {Thumbnail} alt="thumbnail" className="rounded"/>
-        <span>Dhruv Karavdiya</span>
-        <div><span>1 mil views</span><span> . </span><span>10 months ago</span></div>
+    <> 
+    <div className="bg-slate-700 hover:bg-slate-600 w-fit rounded-2xl p-4 cursor-pointer">
+      <div className="mb-4">
+        <img src={video.imgUrl} alt={video.title} className=" h-40 rounded-lg" />
       </div>
-    </>
+      <h1 className="text-xl font-semibold">{video.title}</h1>
+      <p className="text-gray-500">{video.description}</p>
+      </div>
+   </>
   );
-}
+};
+export default VideoCard;
