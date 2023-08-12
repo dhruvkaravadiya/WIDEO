@@ -10,6 +10,7 @@ const commentRoutes = require('./routes/comments');
 const authRoutes = require('./routes/auths');
 const error = require("./middlewares/error");
 const cookieParser = require("cookie-parser");
+const cors = require('cors');
 mongoose
   .connect(dbConnectionLink)
   .then(() => {
@@ -19,6 +20,7 @@ mongoose
     console.log(err.message);
     throw err;
   });
+  app.use(cors());
   app.use(cookieParser());
   app.use(express.json());
   app.use('/api/auth',authRoutes);
