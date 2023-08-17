@@ -8,7 +8,7 @@ import { BiLibrary, BiSearch, BiSolidLike } from "react-icons/bi";
 import { RiSettings4Fill, RiVideoAddFill } from "react-icons/ri";
 import { FaBars, FaUserAlt } from "react-icons/fa";
 import React, { useState } from "react";
-import Body from './Body';
+import NewVideo from "./Helpers/NewVideo";
 function MenuNavbar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -30,12 +30,10 @@ function MenuNavbar() {
             </a>
           </div>
           <div className="flex flex-row">
-            <div className="p-2 hover:bg-gray-700 mx-2">
-            <RiVideoAddFill className="text-white h-5 w-5 " />
-            </div>
-            <div className="p-2 hover:bg-gray-700 mx-2">
+          <NewVideo />
+            <button className="p-2 hover:bg-gray-700 mx-2">
             <FaUserAlt className="text-white h-5 w-5 "/>
-            </div>
+            </button>
            
           </div>
         </div>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import VideoCard from "./VideoCard";
-import Shimmer from "./Shimmer";
-import NotFound from './NotFound';
+import VideoCard from "../VideoCard";
+import Shimmer from "../Helpers/Shimmer";
+import NotFound from '../Helpers/NotFound';
 
 export default function Body({ sidebarOpen }) {
   const [videos, setVideos] = useState([]);

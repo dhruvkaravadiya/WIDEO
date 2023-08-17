@@ -1,7 +1,7 @@
 import './css/App.css';
 import React from 'react';
 import { useState } from 'react';
-import Body from './components/Body';
+import Body from './components/Body/Body';
 import MenuNavbar from './components/MenuNavbar';
 
 function App() {

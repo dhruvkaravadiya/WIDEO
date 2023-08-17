@@ -1,7 +1,5 @@
-import { FiSearch } from "react-icons/fi";
 import backimg from '../images/background.jpg';
 import { HiOutlineMail, HiOutlineLockClosed,HiOutlineUser } from "react-icons/hi";
-import logo from "../images/icon-512.png";
 
 export default function SignUp() {
   return (
