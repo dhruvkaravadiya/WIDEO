@@ -39,19 +39,18 @@ cloudinary.config({
 //   }
 // })();
 
-
-const image1 = 'C#.png';
-cloudinary.uploader.upload(image1, { public_id: "c#" }, function(error, result) {
+const image1 = 'dog.jpeg';
+cloudinary.uploader.upload(image1, { public_id: "dog" }, function(error, result) {
   console.log(result);
 });
 // const image2 = './cars.webp';
 // cloudinary.uploader.upload(image2, { public_id: "cars" }, function(error, result) {
 //   console.log(result);
 // });
-const image3 = 'aeroplane.png';
-cloudinary.uploader.upload(image3, { public_id: "Aeroplane" }, function(error, result) {
-  console.log(result);
-});
+// const image3 = 'aeroplane.png';
+// cloudinary.uploader.upload(image3, { public_id: "Aeroplane" }, function(error, result) {
+//   console.log(result);
+// });
 // const image4 = './redcar.png';
 // cloudinary.uploader.upload(image4, { public_id: "redcar" }, function(error, result) {
 //   console.log(result);
