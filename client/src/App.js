@@ -1,21 +1,21 @@
-import './App.css';
-// import Navbar from './components/Navbar';
-import Home from './components/Home';
+import './css/App.css';
+import React from 'react';
+import { useState } from 'react';
+import Body from './components/Body';
 import MenuNavbar from './components/MenuNavbar';
-import NotFound from './components/NotFound';
-import SignUp from './components/SignUp';
-import Login from './components/Login';
-import Test from './Test';
+
 function App() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
   return (
-    <>
-    <MenuNavbar />
-    {/* <NotFound/> */}
-    {/* <SignUp/> */}
-    
-    {/* <Home/> */}
-    {/* <Test /> */}
-    </>
+    <div className="app-container flex h-screen">
+      <MenuNavbar onToggleSidebar={toggleSidebar} />
+      <Body sidebarOpen={sidebarOpen} />
+    </div>
   );
 }
 

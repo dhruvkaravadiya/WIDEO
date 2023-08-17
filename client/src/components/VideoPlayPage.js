@@ -1,8 +1,9 @@
-export default function VideoPlayPage({video}){
-    return(<>
-        <div className="">
+import React from 'react';
+export default function VideoPlayPage(){
+  return (
+    <div>
 
 
-        </div>
-    </>);
-}
+    </div>
+  );
+};
