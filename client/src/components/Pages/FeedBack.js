@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 export default function FeedbackPage() {
   const [feedback, setFeedback] = useState("");
 
@@ -12,24 +11,42 @@ export default function FeedbackPage() {
   };
 
   return (
-    <div className="p-4 mt-14">
-      <h2 className="text-2xl font-semibold mb-4">Feedback Page</h2>
-      <form onSubmit={handleSubmit}>
-        <label className="block mb-2">Your Feedback:</label>
-        <textarea
-          className="w-full p-2 border border-gray-300 rounded-lg resize-none"
-          rows="5"
-          value={feedback}
-          onChange={(e) => setFeedback(e.target.value)}
-          placeholder="Please enter your feedback here..."
-        ></textarea>
-        <button
-          type="submit"
-          className="mt-4 px-4 py-2 rounded-lg bg-blue-500 text-white"
-        >
-          Submit Feedback
-        </button>
-      </form>
+    <div className="container mx-auto p-5 mt-14">
+  <div className="flex justify-center">
+    <div className="text-center max-w-xl">
+      <h2 className="my-10 text-5xl font-bold font-archivo text-white">Send Feedback</h2>
     </div>
+  </div>
+
+  <div className="flex items-center justify-center">
+    <div className="mb-12 w-full lg:w-5/12">
+      <htmlForm>
+        <div className="mb-6">
+          <label htmlFor="name" className="block mb-1 text-slate-400 font-semibold">Name</label>
+          <input type="text" id="name" name="name" className="w-full text-white bg-[#222f46] px-3 py-2 rounded focus:bg-gray-600 focus:outline-none" placeholder="Your name" />
+        </div>
+        <div className="mb-6">
+          <label htmlFor="email" className="block mb-1 text-slate-400 font-semibold">Email address</label>
+          <input type="email" id="email" name="email" className="w-full text-white bg-[#222f46] px-3 py-2 rounded focus:bg-gray-600 focus:outline-none" placeholder="Your email" />
+        </div>
+        <div className="mb-6">
+          <label htmlFor="message" className="block mb-1 text-slate-400 font-semibold">Message</label>
+          <textarea id="message" name="message" rows="3" className="w-full text-white bg-[#222f46] px-3 py-2 rounded focus:bg-gray-600 focus:outline-none" placeholder="Your message"></textarea>
+        </div>
+        <div className="mb-6">
+          <label className="inline-flex items-center">
+            <input type="checkbox" className="htmlForm-checkbox h-4 w-4 text-primary"  />
+            <span className="ml-2  text-slate-400">Send me a copy of this message</span>
+          </label>
+        </div>
+        <button type="button" className="w-full bg-blue-700 text-white py-2 px-6 rounded shadow-md transition duration-300 ease-in-out hover:bg-primary-600 focus:outline-none focus:ring focus:ring-primary">
+          Send
+        </button>
+      </htmlForm>
+    </div>
+    
+  </div>
+</div>
+
   );
 }
