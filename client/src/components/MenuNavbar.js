@@ -1,40 +1,44 @@
-import { GoHomeFill } from "react-icons/go";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import NewVideo from "./Helpers/NewVideo";
 import Websitelogo from "../images/icon-512.png";
+import { GoHomeFill } from "react-icons/go";
 import { MdSubscriptions } from "react-icons/md";
-import { BsQuestionCircleFill, BsGithub } from "react-icons/bs";
+import {  BsGithub , BsFillTelephoneFill } from "react-icons/bs";
 import { MdFeedback, MdVideoLibrary, MdHistory } from "react-icons/md";
 import { MdWatchLater } from "react-icons/md";
-import { BiLibrary, BiSearch, BiSolidLike } from "react-icons/bi";
-import { RiSettings4Fill, RiVideoAddFill } from "react-icons/ri";
-import { FaBars, FaUserAlt } from "react-icons/fa";
-import React, { useState } from "react";
-import NewVideo from "./Helpers/NewVideo";
+import { BiLibrary, BiSolidLike } from "react-icons/bi";
+import { RiSettings4Fill } from "react-icons/ri";
+import { FaUserAlt } from "react-icons/fa";
+import { HiMiniBars3 } from 'react-icons/hi2';
 function MenuNavbar() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
   return (
     <>
-      <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-[#02142e] dark:border-gray-700">        <div className="p-3 flex items-center justify-between">
-          <div className="cursor-pointer p-2 border-3 border-white border rounded-lg"  onClick={toggleSidebar}>
-            <FaBars className="text-white h-5 w-5"/>
+      <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-[#02142e] dark:border-gray-700">
+        <div className="p-3 flex items-center justify-between">
+          <div
+            className="cursor-pointer p-2 bg-[#24324b] hover:bg-[#30415e] rounded-lg"
+            onClick={toggleSidebar}
+          >
+            <HiMiniBars3 className="text-white h-5 w-5" />
           </div>
           <div className="flex-grow flex items-center justify-center">
             <a href="/" className="flex items-center">
               <img src={Websitelogo} className="h-8" alt="FlowBite Logo" />
-              <span className="self-center text-xl font-semibold ml-2 text-transparent text-white">
+              <span className="self-center text-xl font-semibold ml-1 text-white">
                 IDEO
               </span>
             </a>
           </div>
           <div className="flex flex-row">
-          <NewVideo />
+            <NewVideo />
             <button className="p-2 hover:bg-gray-700 mx-2">
-            <FaUserAlt className="text-white h-5 w-5 "/>
+              <FaUserAlt className="text-white h-5 w-5 " />
             </button>
-           
           </div>
         </div>
       </nav>
@@ -49,8 +53,9 @@ function MenuNavbar() {
         <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-[#02142e]">
           <ul className="space-y-2 font-medium">
             <li>
-              <a
-                href="#"
+              <Link
+                to="/"
+                onClick={toggleSidebar}
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
                 <GoHomeFill
@@ -61,7 +66,7 @@ function MenuNavbar() {
                   viewBox="0 0 22 21"
                 />
                 <span className="ml-3">Home</span>
-              </a>
+              </Link>
             </li>
             <li>
               <a
@@ -179,8 +184,9 @@ function MenuNavbar() {
               </a>
             </li>
             <li>
-              <a
-                href="#"
+              <Link
+                to="/feedback"
+                onClick={toggleSidebar}
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
                 <MdFeedback
@@ -192,23 +198,24 @@ function MenuNavbar() {
                 />
 
                 <span className="flex-1 ml-3 whitespace-nowrap">Feedback</span>
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="#"
+              <Link
+                to="/contact"
+                onClick={toggleSidebar}
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
-                <BsQuestionCircleFill
-                  className="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
+                <BsFillTelephoneFill
+                  className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
                   viewBox="0 0 22 21"
                 />
 
-                <span className="flex-1 ml-3 whitespace-nowrap">Help</span>
-              </a>
+                <span className="flex-1 ml-3 whitespace-nowrap">Contact Us</span>
+              </Link>
             </li>
             <li>
               <a
@@ -229,10 +236,8 @@ function MenuNavbar() {
           </ul>
         </div>
       </aside>
-
     </>
   );
 }
-
 
 export default MenuNavbar;
