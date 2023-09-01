@@ -5,7 +5,7 @@ import { RiVideoAddFill } from 'react-icons/ri';
 // Styling for the modal
 const modalStyles = {
   overlay: {
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     zIndex: 1000,
   },
   content: {
@@ -19,7 +19,9 @@ const modalStyles = {
     maxHeight: '80%',
     overflow: 'auto',
     padding: '20px',
-    transition: 'transform 0.3s ease-in-out',
+    backgroundColor: '#02142e',
+    border: 'none',
+    boxShadow: '0 0 20px rgba(255, 255, 255, 0.5)', // Whitish box shadow
   },
 };
 
@@ -46,43 +48,41 @@ const NewVideo = () => {
         contentLabel="New Video Form"
       >
         <form className="space-y-4">
-          <h2 className="text-2xl font-semibold text-gray-800">
-            Upload Video
-          </h2>
-          <div className="border-dashed border-2 border-gray-300 p-4 rounded-lg">
+          <h2 className="text-2xl font-semibold text-white">Upload Video</h2>
+          <div className="bg-white text-black rounded-lg p-4">
             <div className="mb-2">
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-400">
+              <label htmlFor="title" className="block text-sm font-medium text-black">
                 Video Title
               </label>
               <input
                 type="text"
                 id="title"
                 name="title"
-                className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:bg-gray-800"
+                className="mt-1 p-2 bg-gray-300 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm rounded-md"
                 placeholder="Enter video title"
               />
             </div>
             <div className="mb-2">
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-400">
+              <label htmlFor="description" className="block text-sm font-medium text-black">
                 Description
               </label>
               <textarea
                 id="description"
                 name="description"
                 rows="3"
-                className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:bg-gray-800"
+                className="mt-1 p-2 bg-gray-300 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm rounded-md h-20"
                 placeholder="Enter video description"
               ></textarea>
             </div>
             <div className="mb-2">
-              <label htmlFor="videoFile" className="block text-sm font-medium text-gray-700 dark:text-gray-400">
+              <label htmlFor="videoFile" className="block text-sm font-medium text-black">
                 Video File
               </label>
               <input
                 type="file"
                 id="videoFile"
                 name="videoFile"
-                className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:bg-gray-800"
+                className="mt-1 p-2 bg-gray-300 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm rounded-md"
               />
             </div>
           </div>

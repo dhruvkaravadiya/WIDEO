@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import VideoCard from "../VideoCard";
 import Shimmer from "../Helpers/Shimmer";
 import NotFound from '../Helpers/NotFound';
-
+import { Link } from "react-router-dom";
 export default function Body({ sidebarOpen }) {
   const [videos, setVideos] = useState([]);
   const [filterVideos, setFilterVideos] = useState([]);
@@ -36,17 +36,19 @@ export default function Body({ sidebarOpen }) {
   }, [videos]);
 
   function DisplayCards() {
-    if (filterVideos.length === 0) {
+    if (videos?.length === 0) {
       return <Shimmer />;
-    } else if (filterVideos.length > 0) {
+    } else if (filterVideos?.length > 0) {
       return (
         <div className="w-full grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grip-cols-4">
           {filterVideos.map((video) => (
-            <VideoCard key={video._id} video={video} />
+            <Link to={"/video/"+video._id} key={video._id} >
+            <VideoCard video={video} />
+            </Link>
           ))}
         </div>
       );
-    } else if (!filterVideos) {
+    } else if (filterVideos?.length === 0) {
       return <NotFound />;
     }
   }
@@ -64,7 +66,7 @@ export default function Body({ sidebarOpen }) {
                 performSearch();
               }
             }}
-            className="w-8/12 px-4 py-2 rounded-lg focus:outline-none focus:outline-gray-500 placeholder-gray-500 text-gray-800 dark:bg-[#02142e] dark:text-white"
+            className="w-8/12 px-4 py-2 rounded-lg focus:outline-none focus:outline-gray-500 placeholder-gray-500 text-gray-800 bg-[#222f46] dark:text-white"
             placeholder="Search..."
           />
           <button

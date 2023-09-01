@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import RobotGif from '../../images/404 Robot.gif'
 const NotFound = () => {
+  const clearAndNavigateHome = () => {
+      onHomePageClick();
+  }
   return (
-    <div className="flex flex-col gap-5 justify-center w-screen h-screen bg-indigo text-white">
-      <span className="text-9xl self-center text-skyblue font-montserrat ">404</span>
-      <p className="text-xl font-semibold text-center px-6">Oops! The page you are looking for doesn't exist.</p>
-      <button className='px-5 py-3 border border-3 bg-transparent rounded-md border-skyblue text-skyblue mt-3 font-bold font-roboto-500 w-max self-center'>
+    <div className="flex flex-col gap-5 mt-14 justify-center bg-indigo text-white">
+      <img src = {RobotGif} className='self-center rounded-2xl' alt="not found" width={300} height={300}/>
+      <button onClick={clearAndNavigateHome} className='px-5 py-3 bg-[#24324b] hover:bg-[#30415e] rounded-md border-skyblue mt-3 text-sm font-montserrat w-max self-center'>
         Home Page
       </button>
     </div>
