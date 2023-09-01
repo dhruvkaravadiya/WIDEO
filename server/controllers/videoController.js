@@ -14,6 +14,8 @@ async function addVideo(req, res) {
     }
 }
 
+
+
 async function editVideo(req, res) {
   const video = await Video.findById(req.params.id);
   if (!video) {
@@ -43,6 +45,7 @@ async function deleteVideo(req, res) {
     return res.status(403).send("You can delete only your video");
   }
 }
+
 
 async function addView(req, res) {
   await Video.findByIdAndUpdate(req.params.id, { $inc: { views: 1 } });
