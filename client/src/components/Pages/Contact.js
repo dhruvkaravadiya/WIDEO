@@ -22,6 +22,7 @@ export default function Contact() {
                   <h3 className="text-lg text-gray-200 font-semibold">
                     Email Us
                   </h3>
+                  
                   <a href="dhruvkaravadiya22@gmail.com" className="text-blue-500">
                     @dhruvkaravadiya
                   </a>
