@@ -1,42 +1,63 @@
-import backimg from "../images/background.jpg";
-import { HiOutlineMail, HiOutlineLockClosed } from "react-icons/hi";
-import logo from "../images/icon-512.png";
+import React from "react";
+import { useState } from "react";
 export default function Login() {
+  
   return (
-    <div className="relative w-screen h-screen">
-      <img
-        src={backimg}
-        alt="Background"
-        className="absolute inset-0 object-cover w-full h-full"
-      />
-      <div className="absolute inset-0 flex items-center  justify-center">
-        <div className="bg-white bg-opacity-20 backdrop-blur-lg gap-4 sm:w-4/6 md:w-3/6 lg:w-2/6 xl:w-4/12 mx-auto p-6 flex flex-col z-10 rounded-lg">
-          <div className="flex flex-col justify-center items-center gap-3">
-            <img src={logo} alt="logo" className="w-16 h-16" />
-          </div>
-          <div className="flex items-center flex-grow max-w-lg mx-4 mt-6">
-            <button className="flex items-center justify-center w-12 h-11 bg-midnight-100 rounded-l-lg">
-              <HiOutlineMail className="text-gray-600" />
-            </button>
+    <div className="flex w-full items-center justify-center mx-auto p-5">
+      <div className="w-full sm:w-9/12 md:w-4/12 p-4 rounded-lg border border-gray-200 shadow-md bg-[#222f46] dark:border-gray-700">
+        <h2 className="my-4 text-4xl font-bold text-center text-white">
+          LOGIN
+        </h2>
+        <form className="space-y-4">
+          <div>
+            <label htmlFor="unameemail" className="block text-slate-200">
+              Username or Email
+            </label>
             <input
-              className="w-full h-11 px-4 py-2 rounded-r-lg bg-midnight-100 focus:outline-none"
-              placeholder="Enter Username or Email"
+              type="text"
+              id="unameemail"
+              name="unameemail"
+              className="w-full px-4 py-2 border rounded  focus:outline-none focus:ring focus:border-blue-500"
+              placeholder="Enter Username / Email"
             />
           </div>
-          <div className=" flex items-center flex-grow max-w-lg mx-4">
-            <button className="flex items-center justify-center w-12 h-11 bg-midnight-100 rounded-l-lg">
-              <HiOutlineLockClosed className="text-gray-600" />
-            </button>
+          <div>
+            <label htmlFor="Password" className="block text-slate-200">
+              Password
+            </label>
             <input
-              className="w-full h-11 px-4 py-2 rounded-r-lg bg-midnight-100 focus:outline-none"
-              placeholder="Enter Password"
+              type="password"
+              id="Password"
+              name="Password"
+              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:border-blue-500"
+              placeholder="Your Password"
             />
           </div>
-          <button className="mt-8 flex items-center justify-center self-center bg-skyblue w-11/12 h-11 bg-midnight-100 rounded-lg text-midnight-300 font-bold text-xl">
-              Login
+          <div className="flex w-full justify-between">
+            <div>
+              
+            <span htmlFor="rememberMe" className="font-semibold ml-2 text-blue-400 cursor-pointer hover:text-blue-300">
+              Forgot Password ?
+            </span>
+            </div>
+            <div>
+              <input
+              type="checkbox"
+              className="h-4 w-4 text-blue-600"
+              id="rememberMe"
+            />
+            <label htmlFor="rememberMe" className="ml-2 text-slate-200">
+              Remember Me
+            </label></div>
+            
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring focus:border-blue-500"
+          >
+            Login
           </button>
-          <div className="flex flex-row justify-center gap-3"><span>Don't have and account?</span><a className="cursor-pointer text-skyblue font-bold hover:underline decoration-2">Sign Up</a></div>
-        </div>
+        </form>
       </div>
     </div>
   );
