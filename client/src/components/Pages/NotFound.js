@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import RobotGif from '../../images/404 Robot.gif'
+import RobotGif from '../../assets/images/404 Robot.gif'
 const NotFound = () => {
   const clearAndNavigateHome = () => {
       onHomePageClick();

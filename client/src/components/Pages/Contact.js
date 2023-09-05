@@ -2,7 +2,7 @@ import { BiLogoLinkedin } from "react-icons/bi";
 import { MdEmail } from "react-icons/md";
 import { RiWhatsappFill } from "react-icons/ri";
 import { FaGithub } from "react-icons/fa6";
-import myImg from '../../images/dev.jpeg';
+import myImg from '../../assets/images/dev.jpeg';
 export default function Contact() {
   return (
     <>

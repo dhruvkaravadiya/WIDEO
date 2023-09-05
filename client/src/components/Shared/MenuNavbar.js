@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import NewVideo from "./Helpers/NewVideo";
-import Websitelogo from "../images/icon-512.png";
+import NewVideo from "../Pages/NewVideo";
+import Websitelogo from "../../../public/icon-512.png";
 import { GoHomeFill } from "react-icons/go";
 import { MdSubscriptions } from "react-icons/md";
 import {  BsGithub , BsFillTelephoneFill } from "react-icons/bs";
@@ -16,6 +16,7 @@ function MenuNavbar() {
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
+  
   return (
     <>
       <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-[#02142e] dark:border-gray-700">
@@ -42,7 +43,7 @@ function MenuNavbar() {
           </div>
         </div>
       </nav>
-
+ {/*  SO here we end our sesssion and please make sure to read the provided docs */}
       <aside
         id="logo-sidebar"
         className={`fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform ${

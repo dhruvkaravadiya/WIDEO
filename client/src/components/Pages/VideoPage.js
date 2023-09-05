@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Shimmer from './Helpers/Shimmer';
+import Shimmer from '../Helpers/Shimmer';
 export default function VideoPage() {
   const { vID } = useParams();
   const [video, setVideo] = useState({});

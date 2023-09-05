@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import VideoCard from "../VideoCard";
+import VideoCard from "./VideoCard";
 import Shimmer from "../Helpers/Shimmer";
-import NotFound from '../Helpers/NotFound';
+import NotFound from '../Pages/NotFound';
 import { Link } from "react-router-dom";
 export default function Body({ sidebarOpen }) {
   const [videos, setVideos] = useState([]);
@@ -29,6 +29,7 @@ export default function Body({ sidebarOpen }) {
 
   useEffect(() => {
     getRandomVideos();
+    
   }, []);
 
   useEffect(() => {

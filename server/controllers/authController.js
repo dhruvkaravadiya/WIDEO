@@ -11,6 +11,7 @@ async function signup(req, res) {
 }
 
 async function signin(req, res) {
+  console.log("Server side - SignIn method called");
   const user = await User.findOne({
     $or: [{ name: req.body.name }, { email: req.body.email }],
   });
