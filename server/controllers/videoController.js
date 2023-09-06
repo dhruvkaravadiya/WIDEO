@@ -86,6 +86,22 @@ async function getVideosByTags(req,res){
   const videos = await Video.find({tags:{$in:tags}}).limit(20);  
   res.send(videos);
 }
+
+async function getVideosByUserID(req, res) {
+  try {
+    const userId = req.params.id; 
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    const userVideoIds = user.videos;
+    const userVideos = await Video.find({ _id: { $in: userVideoIds } });
+    res.status(200).json({ user: user, videos: userVideos });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
 module.exports = {
   addVideo,
   editVideo,
@@ -96,5 +112,6 @@ module.exports = {
   getRandomVideos,
   getSubscribedVideos,
   searchVideosByTitle,
-  getVideosByTags
+  getVideosByTags,
+  getVideosByUserID
 };

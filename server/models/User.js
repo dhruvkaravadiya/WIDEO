@@ -18,6 +18,9 @@ const userSchema = new mongoose.Schema({
     img:{
         type:String,
     },
+    videos:{
+        type:[String]
+    },
     subscribers:{
         type:Number,
         default:0,
