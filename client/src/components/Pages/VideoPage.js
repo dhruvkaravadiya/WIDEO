@@ -1,25 +1,10 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
 import Shimmer from '../Helpers/Shimmer';
+import useVideo from "../hooks/useVideo";
 export default function VideoPage() {
   const { vID } = useParams();
-  const [video, setVideo] = useState({});
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    getVideoDetails();
-  }, []);
-  const getVideoDetails = async () => {
-    try {
-      const response = await fetch("http://localhost:3333/api/videos/find/" + vID);
-      const data = await response.json();
-      setVideo(data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching video details:", error);
-      setLoading(false);
-    }
-  };
+  const {video , loading} = useVideo(vID);
   if (loading) {
     return <Shimmer />;
   }
