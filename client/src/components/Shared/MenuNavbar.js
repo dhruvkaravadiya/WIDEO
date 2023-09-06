@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useContext  } from "react";
 import { Link } from "react-router-dom";
 import NewVideo from "../Pages/NewVideo";
 import Websitelogo from "../../../public/icon-512.png";
@@ -11,7 +11,11 @@ import { BiLibrary, BiSolidLike } from "react-icons/bi";
 import { RiSettings4Fill } from "react-icons/ri";
 import { FaUserAlt } from "react-icons/fa";
 import { HiMiniBars3 } from 'react-icons/hi2';
+import userContext from "../Helpers/UserContext";
+
 function MenuNavbar() {
+  const { user }  = useContext(userContext);
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -36,10 +40,12 @@ function MenuNavbar() {
             </a>
           </div>
           <div className="flex flex-row">
+            
             <NewVideo />
-            <button className="p-2 hover:bg-gray-700 mx-2">
+            <h1 className="text-[#43a3fc] p-2 font-semibold font-archivo">{user.name}</h1>
+            {/* <button className="p-2 hover:bg-gray-700 mx-2">
               <FaUserAlt className="text-white h-5 w-5 " />
-            </button>
+            </button> */}
           </div>
         </div>
       </nav>
@@ -119,8 +125,9 @@ function MenuNavbar() {
               </a>
             </li>
             <li>
-              <a
-                href="#"
+              <Link
+                to="/yourvideos"
+                onClick={toggleSidebar}
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
                 <MdVideoLibrary
@@ -131,10 +138,8 @@ function MenuNavbar() {
                   viewBox="0 0 22 21"
                 />
 
-                <span className="flex-1 ml-3 whitespace-nowrap">
-                  Your Videos
-                </span>
-              </a>
+                <span className="flex-1 ml-3 whitespace-nowrap">Your Videos</span>
+              </Link>
             </li>
             <li>
               <a
