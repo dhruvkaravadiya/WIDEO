@@ -1,4 +1,4 @@
-import React, { lazy, Suspense , useState, useEffect} from "react";
+import React, { lazy, Suspense, useState, useEffect } from "react";
 import "./assets/css/index.css";
 import Body from "./components/Shared/Body";
 import MenuNavbar from "./components/Shared/MenuNavbar";
@@ -8,30 +8,22 @@ import Contact from "./components/Pages/Contact";
 import VideoPage from "./components/Pages/VideoPage";
 const Login = lazy(() => import("./components/Pages/Login"));
 const SignUp = lazy(() => import("./components/Pages/SignUp"));
+const YourVideos = lazy(() => import("./components/Pages/YourVideos"));
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import userContext from "./components/Helpers/UserContext";
-export default function App() {
-  const [user, setUser] = useState({
-    id : null,
-    name: null,
-    email: null,
-    password: null,
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import rootReducer from './rootReducer';
+import TrendVideos from "./components/Pages/TrendVideos";
+
+const store = configureStore({
+  reducer: rootReducer
 });
-useEffect(() => {
-  // Check if user data exists in localStorage
-  const storedUserData = localStorage.getItem("userData");
 
-  if (storedUserData) {
-      // If user data is found, parse it and set it as the initial user context
-      const parsedUserData = JSON.parse(storedUserData);
-      setUser(parsedUserData);
-  }
-}, []);
-
+export default function App() {
   return (
-    <userContext.Provider value={{ user, setUser }}>
+    <Provider store={store}>
       <div className="app-container flex h-screen">
         <MenuNavbar />
         <Outlet />
@@ -41,7 +33,7 @@ useEffect(() => {
         autoClose={2500}
         hideProgressBar={false}
       />
-    </userContext.Provider>
+    </Provider>
   );
 }
 export const appRouter = createBrowserRouter([
@@ -53,6 +45,10 @@ export const appRouter = createBrowserRouter([
       {
         path: "/",
         element: <Body />,
+      },
+      {
+        path: "/trending",
+        element: <TrendVideos />
       },
       {
         path: "/feedback",
@@ -67,8 +63,12 @@ export const appRouter = createBrowserRouter([
         element: <VideoPage />,
       },
       {
-        path: "/yourvideos/:userID",
-        element: <VideoPage />,
+        path: "/yourvideos",
+        element: (
+          <Suspense>
+            <YourVideos />
+          </Suspense>
+        ),
       },
       {
         path: "/login",
