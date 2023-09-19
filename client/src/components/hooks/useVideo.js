@@ -9,6 +9,7 @@ const useVideo = (vID) => {
   }, []);
   const getVideoDetails = async () => {
     try {
+      setLoading(true);
       const response = await fetch("http://localhost:3333/api/videos/find/" + vID);
       const data = await response.json();
       setVideo(data);
