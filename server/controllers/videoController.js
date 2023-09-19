@@ -14,8 +14,6 @@ async function addVideo(req, res) {
     }
 }
 
-
-
 async function editVideo(req, res) {
   const video = await Video.findById(req.params.id);
   if (!video) {
@@ -96,7 +94,7 @@ async function getVideosByUserID(req, res) {
     }
     const userVideoIds = user.videos;
     const userVideos = await Video.find({ _id: { $in: userVideoIds } });
-    res.status(200).json({ user: user, videos: userVideos });
+    res.status(200).json(userVideos);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

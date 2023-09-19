@@ -3,15 +3,16 @@ import VideoCard from "./VideoCard";
 import Shimmer from "../Helpers/Shimmer";
 import NotFound from '../Pages/NotFound';
 import { Link } from "react-router-dom";
+import { getRandomVideos } from "../../api/video";
 export default function Body({ sidebarOpen }) {
   const [videos, setVideos] = useState([]);
   const [filterVideos, setFilterVideos] = useState([]);
   const [searchText, setSearchText] = useState("");
 
-  const getRandomVideos = async () => {
+  const setRandomVideos = async () => {
     try {
-      const response = await fetch("http://localhost:3333/api/videos/random");
-      const data = await response.json();
+      const response = await getRandomVideos();
+      const data = await response;
       setVideos(data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -28,7 +29,7 @@ export default function Body({ sidebarOpen }) {
   };
 
   useEffect(() => {
-    getRandomVideos();
+    setRandomVideos();
     
   }, []);
 

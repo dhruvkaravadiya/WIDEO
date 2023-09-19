@@ -23,4 +23,6 @@ router.get('/subscribed',verifyToken,asyncMiddleware(videoController.getSubscrib
 router.get('/tags',asyncMiddleware(videoController.getVideosByTags));
 //search videos by title
 router.get('/search',asyncMiddleware(videoController.searchVideosByTitle));
+//get videos of a user
+router.get('/:id',asyncMiddleware(videoController.getVideosByUserID));
 module.exports = router;
