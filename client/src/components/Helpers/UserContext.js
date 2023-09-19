@@ -5,7 +5,8 @@ const userContext = createContext({
         id: null,
         name:null,
         email : null,
-        password : null
+        password : null,
+        imgUrl:null
     },
 });
 

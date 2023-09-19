@@ -1,13 +1,22 @@
 const mongoose = require("mongoose");
-const videoSchema = new mongoose.Schema(
-  {
-    userId: {
-      type: String,
-      required: true,
+const videoSchema = new mongoose.Schema({ 
+    user:{
+      id: {
+        type: String,
+        required: true,
+      },
+      name:{
+        type:String,
+        required:true,
+      },
+      imgUrl:{
+        type:String,
+        required:true
+      },
     },
     title:{
       type:String,
-      requiref:true,
+      require:true,
     },
     description: {
       type: String,
@@ -20,7 +29,7 @@ const videoSchema = new mongoose.Schema(
     videoUrl: {
       type: String,
       required: true,
-    },
+    },  
     views: {
       type: Number,
       default: 0,
@@ -35,7 +44,7 @@ const videoSchema = new mongoose.Schema(
     },
     dislikes: { type: [String], default: [] },
   },
-  { timestamps: true }
+  { timestamps: true  , versionKey : false}
 );
 
 const Video = mongoose.model('Video',videoSchema);
