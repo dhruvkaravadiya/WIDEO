@@ -11,7 +11,6 @@ async function signup(req, res) {
 }
 
 async function signin(req, res) {
-  console.log("Server side - SignIn method called");
   const user = await User.findOne({
     $or: [{ name: req.body.name }, { email: req.body.email }],
   });
@@ -29,4 +28,12 @@ async function signin(req, res) {
   console.log("Login Successfull");
   res.cookie("access_token",token,{httpOnly:true}).status(200).json(otherprops);
 }
-module.exports = { signup, signin };
+async function logout(req, res) {
+  res
+    .cookie("access_token", null, {
+      expires: new Date(Date.now()),
+      httpOnly: true
+    })
+  res.status(200).json({ success: true, message: "Successful Logout" });
+}
+module.exports = { signup, signin , logout };
