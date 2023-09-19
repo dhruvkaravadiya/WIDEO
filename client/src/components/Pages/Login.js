@@ -1,9 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { loginUser } from "../../api/auth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
-import userContext from "../Helpers/UserContext";
+import { useDispatch } from "react-redux";
+import { login } from "../../slices/authSlice"
 
 export default function Login() {
   //we will store the username/email and password in this state variable
@@ -15,7 +16,7 @@ export default function Login() {
   }); 
   //we will create the useContext variable to pass
   //the user credentials to the golbal user context
-  const { user ,setUser } = useContext(userContext);
+  const dispatch = useDispatch();
   //simple navigate to the home page
   const navigate = useNavigate();
 
@@ -44,18 +45,19 @@ export default function Login() {
         id : response.data._id,
         name: response.data.name, 
         email: response.data.email,
-        password: response.data.password
+        password: response.data.password,
+        imgUrl: response.data.profileImageUrl
       };
       // Store user data in localStorage
       localStorage.setItem("userData", JSON.stringify(userData));
-      setUser(userData);
-      Cookies.set("token", token, {
+      dispatch(login(userData));
+      Cookies.set("access_token", token, {
         expires: 7,
         secure: true,
         sameSite: "strict",
         httpOnly: true,
       });
-      toast.success("Login Successfull");
+      toast.success("Login Successful");
       navigate("/");
     } catch (err) {
       toast.error("Login Failed");
