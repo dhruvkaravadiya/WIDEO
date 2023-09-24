@@ -3,60 +3,62 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
       video: {},
       user: {},
-      isSubscribed: false,
-      subscribers:[],
-      isLiked: false,
-      likes:[],
-      dislikes:[],
-      comments:[]
-}
+};
 
 const videoSlice = createSlice({
       name: "video",
       initialState,
       reducers: {
-            setUser:(state,action)=>{
+            setVideo: (state, action) => {
+                  state.video = action.payload;
+            },
+            setUser: (state, action) => {
                   state.user = action.payload;
             },
-            subscribe:(state,action)=>{
-                  state.isSubscribed= true;
-                  state.subscribers.push(action.payload);
+            subUnSub: (state, action) => {
+                  if (state.user.subscribers.includes(action.payload)) {
+                    state.user.subscribers = state.user.subscribers.filter(subsId => subsId !== action.payload);
+                  } else {
+                    state.user.subscribers.push(action.payload);
+                  }
+                },
+                
+            addComment: (state, action) => {
+                  state.video.comments.push(action.payload)
             },
-            unsubscribe:(state,action)=>{
-                  state.isSubscribed= false;
-                  state.subscribers.pop(action.payload);
+            likeVideo: (state, action) => {
+                  const userId = action.payload;
+                  if (!state.video.likes.includes(userId)) {
+                        state.video.likes.push(userId);
+                        state.video.dislikes.slice(
+                              state.video.dislikes.findIndex(id=>id===userId),1
+                        );
+                  }
             },
-            setVideo:(state,action)=>{
-                  state.video = action.payload
+            dislikeVideo: (state, action) => {
+                  const userId = action.payload;
+                  if (!state.video.dislikes.includes(userId)) {
+                        state.video.dislikes.push(userId);
+                        state.video.likes.slice(
+                              state.video.likes.findIndex(id=>id===userId),1
+                        );
+                  }
             },
-            setLikes:(state,action)=>{
-                  state.likes = action.payload;
+            clearVideoState: (state) => {
+                  state.video = {};
+                  state.user = {};
             },
-            setDislikes:(state,action)=>{
-                  state.dislikes = action.payload;
-            },
-            setComments:(state,action)=>{
-                  state.comments = action.payload;
-            },
-            addComment:(state,action)=>{state.comments.push(action.payload)},
-            likeVideo:(state,action)=>{
-                  state.isLiked = true,
-                  state.likes.push(action.payload);
-            },
-            dislikeVideo:(state,action)=>{
-                  state.isLiked = false,
-                  state.dislikes.push(action.payload);
-            }
-      }
+      },
 });
 
 export const {
-            setVideo,
-            setLikes,
-            setDislikes,
-            setComments,
-            likeVideo,
-            dislikeVideo
-            } = videoSlice.actions;
+      setUser,
+      setVideo,
+      subUnSub,
+      addComment,
+      likeVideo,
+      dislikeVideo,
+      clearVideoState,
+} = videoSlice.actions;
 
 export default videoSlice.reducer;

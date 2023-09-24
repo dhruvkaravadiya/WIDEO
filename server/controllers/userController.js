@@ -32,43 +32,28 @@ async function updateUser(req, res) {
 }
 //subscribe to a channel
 async function subscribe(req, res) {
+    console.log("User Id : ",req.user.id);
+    console.log("Channel Id : ",req.params.id);
     await User.findByIdAndUpdate(req.user.id,{$push:{subscribedChannels:req.params.id}});
-    await User.findByIdAndUpdate(req.params.id , {$inc:{
-      subscribers:1
-    }});
+    await User.findByIdAndUpdate(req.params.id , {$push:{subscribers:req.user.id}});
     res.status(200).send('Successfully Subscribed');
 }
 //unsubscribe to a channel
 async function unSubscribe(req, res) {
+  console.log("User Id : ",req.user.id);
+  console.log("Channel Id : ",req.params.id);
   await User.findByIdAndUpdate(req.user.id,{$pull:{subscribedChannels:req.params.id}});
-  await User.findByIdAndUpdate(req.params.id , {$inc:{
-    subscribers:-1
+  await User.findByIdAndUpdate(req.params.id , {$pull:{
+    subscribers:req.user.id
   }});
   res.status(200).send('Unsubscribed');
 }
-//like a video
-async function like(req, res) {
-  const id = req.user.id;
-  const videoId = req.params.videoId;
-  await Video.findByIdAndUpdate(videoId , {$addToSet : {likes:id},$pull:{dislikes:id}});
-  res.status(200).send("Liked the Video");
-}
-//dislike a video
-async function dislike(req, res) {
-  const id = req.user.id;
-  const videoId = req.params.videoId;
-  await Video.findByIdAndUpdate(videoId , {
-    $addToSet : {dislikes:id},
-    $pull:{likes:id}
-  });
-  res.status(200).send("DisLiked the Video");
-}
+
 module.exports = {
   getUser,
   deleteUser,
   updateUser,
   subscribe,
   unSubscribe,
-  like,
-  dislike,
+
 };

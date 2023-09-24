@@ -40,23 +40,39 @@ export default function Login() {
   const handleLogin = async () => {
     try {
       const response = await loginUser(credentials);
-      const token = response.data.token;
+      const token = response.data.access_token;
       const userData = {
-        id : response.data._id,
-        name: response.data.name, 
-        email: response.data.email,
-        password: response.data.password,
-        imgUrl: response.data.profileImageUrl
+        id:response.data.user._id,
+        name: response.data.user.name, 
+        email: response.data.user.email,
+        password: response.data.user.password,
       };
+          // Check if the "access_token" cookie already exists
+    const accessToken = Cookies.get("access_token");
+
+    if (!accessToken) {
+      // Set the "access_token" cookie if it doesn't exist
+      Cookies.set("access_token", token, {
+        expires: 12000000,
+        secure: true,
+        sameSite: "None",
+        httpOnly: true,
+      });
+    }
       // Store user data in localStorage
       localStorage.setItem("userData", JSON.stringify(userData));
       dispatch(login(userData));
+      
       Cookies.set("access_token", token, {
-        expires: 7,
+        expires: 12000000,
         secure: true,
-        sameSite: "strict",
-        httpOnly: true,
-      });
+        sameSite: "None"
+        });
+
+      console.log("Headers : "+response.headers);
+      console.log("User : "+ JSON.stringify(userData));
+      console.log("Cookies : ",Cookies.get("access_token"));
+      console.log("Response : "+response.data.user);
       toast.success("Login Successful");
       navigate("/");
     } catch (err) {

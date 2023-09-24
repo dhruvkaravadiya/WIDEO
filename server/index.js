@@ -20,7 +20,8 @@ mongoose
     console.log(err.message);
     throw err;
   });
-  app.use(cors());
+  app.use(cors({origin: "http://localhost:1234", // Replace with your frontend origin
+  credentials: true,}));
   app.use(cookieParser());
   app.use(express.json());
   app.use('/api/auth',authRoutes);

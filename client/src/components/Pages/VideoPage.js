@@ -1,72 +1,254 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import VideoPageShimmer from '../Helpers/VideoPageShimmer';
-import useVideo from "../hooks/useVideo";
+import React, { useState, useEffect } from "react";
+import { useParams,Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import Cookies from "js-cookie";
+import { getRandomVideos } from "../../api/video";
+import {
+  setVideo,
+  setUser,
+  subUnSub,
+  addComment,
+  likeVideo,
+  dislikeVideo,
+  clearVideoState,
+} from "../../slices/videoPageSlice";
+import VideoPageShimmer from "../Helpers/VideoPageShimmer";
 import { BiLike, BiDislike } from "react-icons/bi";
 import { PiShareFat } from "react-icons/pi";
+import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
+import axios from "axios";
+
 
 export default function VideoPage() {
+  const [videos, setVideos] = useState([]);
   const { vID } = useParams();
-  const { video, loading } = useVideo(vID);
+  const dispatch = useDispatch();
 
-  if (loading) {
-    return <VideoPageShimmer />;
+  const [showDescription, setShowDescription] = useState(false);
+
+  const video = useSelector((state) => state.video.video);
+  const user = useSelector((state) => state.video.user);
+  const currUser = useSelector((state) => state.auth.user);
+
+  const api = axios.create({
+    baseURL: 'http://localhost:3333/api',
+    withCredentials: true,
+  });
+  //date formatter
+  function formatRelativeDate(createdAt) {
+    const currentDate = new Date();
+    const createdAtDate = new Date(createdAt);
+    const timeDifference = currentDate - createdAtDate;
+    const seconds = Math.floor(timeDifference / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    const months = Math.floor(days / 30);
+    const years = Math.floor(months / 12);
+
+    if (years > 0) {
+      return `${years} ${years === 1 ? 'year' : 'years'} ago`;
+    } else if (months > 0) {
+      return `${months} ${months === 1 ? 'month' : 'months'} ago`;
+    } else if (days > 0) {
+      return `${days} ${days === 1 ? 'day' : 'days'} ago`;
+    } else if (hours > 0) {
+      return `${hours} ${hours === 1 ? 'hour' : 'hours'} ago`;
+    } else if (minutes > 0) {
+      return `${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`;
+    } else {
+      return `${seconds} ${seconds === 1 ? 'second' : 'seconds'} ago`;
+    }
   }
 
-  const isMobileScreen = window.innerWidth <= 768; // Define your breakpoint for mobile screens
+  const setRandomVideos = async () => {
+    try {
+      const response = await getRandomVideos();
+      const data = await response;
+      setVideos(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
-  return (
-    <div className="mt-14 w-full lg:px-10  sm:px-3 md:px-4">
-      <div className="md:w-8/12 ">
-      <div className="mt-4">
-        <video controls className="h-50vh rounded-2xl sm:w-full">
-          <source src={video.videoUrl} type="video/mp4" />
-          Sorry, your browser doesn't support embedded videos.
-        </video>
-        <div className="flex flex-row gap-4 items-end my-4 px-2">
-          <h1 className="text-white text-2xl font-bold ">{video.title}</h1>
-          <h1 className="text-white text-md font-regular">{video.views} views</h1>
-        </div>
+  //Subscribe to a channel
+  const handleSubscription = async () => {
+    console.log("state user : ", currUser);
+    console.log("channel : ", user);
+    try {
+      // Check if the user is authenticated
+      if (!currUser) {
+        // Handle the case where the user is not logged in
+        console.log("User is not authenticated haha.");
+        return;
+      }
+      if (user.subscribers?.includes(currUser.id)) {
+        await api.put('/users/unsub/' + user._id);
+      } else {
+        await api.put(`/users/sub/${user._id}`);
+      }
+      dispatch(subUnSub(currUser.id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  //Like a video
+  const handleLike = async () => {
+    if (!currUser) {
+      console.log("User is not authenticated haha.");
+      return;
+    }
+    await api.put(`/videos/like/${video._id}`);
+    dispatch(likeVideo(video._id));
+  }
+  //dislike a video
+  const handleDisLike = async () => {
+    if (!currUser) {
+      console.log("User is not authenticated haha.");
+      return;
+    }
+    await api.put(`/videos/dislike/${video._id}`);
+    dispatch(dislikeVideo(video._id));
+  }
+  //fetch video data
+  const handleFetchData = async () => {
 
-        <div className="flex px-2 flex-col md:flex-row sm:flex-row justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <img className="border-2 rounded-full h-10 w-10 border-[#396983]" src={video.user.imgUrl} alt={video.user.name} />
-            <div className="flex sm:items-start items-center md:gap-0 gap-3 flex-row md:flex-col sm:flex-row lg:flex-col">
-              <div className="text-md text-gray-200 font-semibold">{video.user.name}</div>
-              <div className="text-sm text-gray-200 font-regular">3 subscribers</div>
+    try {
+      const videoRes = await fetch("http://localhost:3333/api/videos/find/" + vID);
+      const videoData = await videoRes.json();
+      const userRes = await fetch("http://localhost:3333/api/users/find/" + videoData.user.id);
+      const userData = await userRes.json();
+
+      dispatch(setVideo(videoData));
+      dispatch(setUser(userData));
+
+    } catch (error) {
+      console.error("Error fetching video details:", error);
+      // Make sure to finish loading in case of an error
+    }
+  };
+  useEffect(() => {
+    handleFetchData();
+    setRandomVideos();
+    // Handle clear state on unmount
+    return () => {
+      dispatch(clearVideoState());
+    };
+
+  }, [dispatch, vID]);
+
+  const videoUrl = video.videoUrl;
+  const isMobileScreen = window.innerWidth <= 768;
+  return !videoUrl ? <VideoPageShimmer /> : (
+    <div className="mt-14 w-full scroll-m-3 h-screen lg:px-10 flex gap-5 sm:px-3 md:px-4 ">
+      <div className="md:w-8/12">
+        <div className="mt-4">
+          {videoUrl ? (
+            <video controls preload="auto" poster={video.imgUrl} className="h-50vh rounded-2xl sm:w-full">
+              <source src={videoUrl} type="video/mp4" />
+              Sorry, your browser doesn't support embedded videos.
+            </video>
+          ) : (
+            <p>Loading video...</p>
+          )}
+
+          <div className="flex flex-row gap-4 items-end my-4 px-2">
+            <h1 className="text-white text-2xl font-bold ">{video.title}</h1>
+            <h1 className="text-white text-md font-regular">{video.views} views</h1>
+          </div>
+
+          {/* Render user details */}
+          <div className="flex px-2 flex-col md:flex-row sm:flex-row justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <img
+                preload="auto"
+                className="border-2 rounded-full h-10 w-10 border-[#396983]"
+                src={user?.profileImageUrl}
+                alt={user.name}
+              />
+
+              <div className="flex sm:items-start items-center md:gap-0 gap-3 flex-row md:flex-col sm:flex-row lg:flex-col">
+                <div className="text-md text-gray-200 font-semibold">{user.name}</div>
+                <div className="text-sm text-gray-200 font-regular">{user.subscribers.length} subscribers</div>
+              </div>
+              {/* Conditionally apply justify-end class for "Subscribe" button */}
+              <div className={`flex ${isMobileScreen ? 'justify-end' : ''}`}>
+                <button onClick={handleSubscription} className="p-2 px-3 text-black font-bold test-md bg-[#2eacd6] rounded-3xl ms-6">
+                  {user.subscribers?.includes(currUser._id) ? "Unsubscribe" : "Subscribe"}
+                </button>
+              </div>
             </div>
-            {/* Conditionally apply justify-end class for "Subscribe" button */}
-            <div className={`flex ${isMobileScreen ? 'justify-end' : ''}`}>
-              <button className="p-2 px-3 text-black font-bold test-md bg-[#2eacd6] rounded-3xl ms-6">Subscribe</button>
+            {/* Render like, dislike, and share buttons */}
+            <div className="flex items-center gap-4">
+              <div className="flex flex-row bg-lightblue1 rounded-3xl">
+
+                <button onClick={handleLike} className="flex flex-row rounded-l-3xl hover:bg-lightblue2">
+                  <BiLike className="p-2 w-10 h-10 text-slate-400  rounded-l-3xl" />
+                  <span className="text-slate-400 my-auto me-2 font-md">{video.likes?.length} likes</span>
+                </button>
+
+                <div className="w-0.5 h-full bg-slate-400"></div>
+                <button onClick={handleDisLike}>
+                  <BiDislike className="p-2 w-10 h-10 text-slate-400 hover:bg-lightblue2 rounded-r-3xl" />
+                </button>
+              </div>
+              <button className="flex flex-row justify-center items-center bg-lightblue1 rounded-3xl hover:bg-lightblue2">
+                <PiShareFat className="w-10 text-slate-400 h-10 p-2 rounded-l-3xl" />
+                <span className="text-slate-400  rounded-r-3xl pe-3 font-semibold text-lg">Share</span>
+              </button>
             </div>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="flex flex-row bg-lightblue1 rounded-3xl">
-              <button>
-                <BiLike className="p-2 w-10 h-10 text-slate-400 hover:bg-lightblue2 rounded-l-3xl" />
-              </button>
-              <button>
-                <BiDislike className="p-2 w-10 h-10 text-slate-400 hover:bg-lightblue2 rounded-r-3xl" />
-              </button>
-            </div>
-            <button className="flex flex-row justify-center items-center bg-lightblue1 rounded-3xl hover:bg-lightblue2">
-              <PiShareFat className="w-10 text-slate-400 h-10 p-2 rounded-l-3xl" />
-              <span className="text-slate-400  rounded-r-3xl pe-3 font-semibold text-lg">Share</span>
-            </button>
+        </div>
+        {/* Render video description */}
+        <div className="my-4 mx-2 whitespace-pre-wrap dark:bg-lightblue1 rounded-xl p-3 shadow-sm">
+          <div className="flex flex-row w-full justify-between">
+            <h2
+              className="text-slate-300 w-fit mb-3 font-semibold cursor-pointer"
+            >
+              Description
+            </h2>
+            <h2 className={`text-slate-300 w-fit mb-3 font-regular cursor-pointer`}
+              onClick={() => setShowDescription(!showDescription)}>
+              {showDescription
+                ? <IoIosArrowUp className="rounded-full p-1 bg-darkblue2  h-7 w-7" />
+                : <IoIosArrowDown className="h-7 w-7 p-1 rounded-full bg-darkblue2" />
+              }
+            </h2>
           </div>
+          <hr className="mb-4" />
+          {showDescription ? (
+            <>
+              <div className="text-slate-200" dangerouslySetInnerHTML={{ __html: video.description }}></div>
+              {/* Render video tags */}
+              <div className="text-slate-200 mt-5 font-semibold">
+                {video.tags.map((tag, index) => (
+                  <i key={index}>
+                    <span className="text-blue-400"> #{tag} </span>
+                  </i>
+                ))}
+              </div>
+            </>
+          ) : null}
+
         </div>
       </div>
-      <div className="my-4 mx-2 whitespace-pre-wrap dark:bg-lightblue1 rounded-xl p-3 shadow-sm">
-        <h2 className="text-slate-300 mb-3 font-semibold">Description</h2>
-        <hr className="mb-4" />
-        <div className="text-slate-200" dangerouslySetInnerHTML={{ __html: video.description }}></div>
-        <div className="text-slate-200 mt-5 font-semibold"> 
-          {video.tags.map((tag, index) => (
-            <i><span className="text-blue-400" key={index}> #{tag} </span></i>
-          ))}
-        </div>
-      </div>
+      <div className=" h-full md:w-4/12 p-2 flex flex-col items-start">
+        <h1 className="font-bold text-3xl my-3 text-sky-600 text-archivo">Recommonded</h1>
+        {videos.map((vid)=>(
+          <Link to={"/video/"+vid._id} key={vid._id} >
+          <div className="w-full my-2 h-28 flex flex-row cursor-pointer p-1 rounded-lg">
+            <img src={vid.imgUrl} key={vid._id} alt={vid.title} className="h-26 w-40 rounded-xl" />
+            <div className=" ms-4 mt-1 flex flex-col">
+              <span className="text-md font-bold text-slate-200">{vid.title}</span>
+              <span className="text-md font-semibold text-slate-500">{vid.user.name}</span>
+              <span className="text-md font-semibold text-slate-500">
+                {vid.views} views - {formatRelativeDate(vid.createdAt)}
+              </span>
+            </div>
+          </div>
+          </Link>
+        ))} 
       </div>
     </div>
-  );
+  )
 }

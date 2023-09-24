@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
-
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -23,8 +24,7 @@ const userSchema = new mongoose.Schema(
       type: [String],
     },
     subscribers: {
-      type: Number,
-      default: 0,
+      type: [String],  
     },
     subscribedChannels: {
       type: [String],
@@ -35,6 +35,23 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true, versionKey: false }
 );
+
+userSchema.methods.verifyPassword = async function (pass) {
+  return await bcrypt.compare(pass, this.password);
+}
+
+userSchema.methods.generateToken = function (user) {
+  const token = jwt.sign({ id: user._id }, process.env.JWT_KEY, {
+      expiresIn:  process.env.TOKEN_EXPIRY ,
+  });
+  return token;
+}
+
+userSchema.statics.createHashedPassword = function (pass) {
+  const salt = bcrypt.genSaltSync(10);
+  const hash = bcrypt.hashSync(pass, salt);
+  return hash;
+}
 
 const User = mongoose.model("User", userSchema);
 

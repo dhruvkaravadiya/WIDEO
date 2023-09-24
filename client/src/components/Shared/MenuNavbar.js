@@ -14,7 +14,7 @@ import { logout } from "../../slices/authSlice";
 
 function MenuNavbar() {
   const user = useSelector((state) => state.auth.user);
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn )
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const dispatch = useDispatch() ;
 
   const handleLogout = async () => {

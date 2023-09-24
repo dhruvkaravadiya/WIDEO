@@ -6,7 +6,8 @@
             {
                 "exclude": [
                     "error",
-                    "warn"
+                    "warn",
+                    "log"
                 ]
             }
         ]

@@ -5,17 +5,20 @@ import MenuNavbar from "./components/Shared/MenuNavbar";
 import FeedBack from "./components/Pages/FeedBack";
 import Error from "./components/Pages/Error";
 import Contact from "./components/Pages/Contact";
-import VideoPage from "./components/Pages/VideoPage";
+
+const VideoPage = lazy(()=>import("./components/Pages/VideoPage"));
+import Subscribed from "./components/Pages/Subscribed";
 const Login = lazy(() => import("./components/Pages/Login"));
 const SignUp = lazy(() => import("./components/Pages/SignUp"));
 const YourVideos = lazy(() => import("./components/Pages/YourVideos"));
+const TrendVideos = lazy(() => import("./components/Pages/TrendVideos"));
+
 import { createBrowserRouter, Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import rootReducer from './rootReducer';
-import TrendVideos from "./components/Pages/TrendVideos";
 
 const store = configureStore({
   reducer: rootReducer
@@ -48,7 +51,14 @@ export const appRouter = createBrowserRouter([
       },
       {
         path: "/trending",
-        element: <TrendVideos />
+        element: 
+        <Suspense>
+          <TrendVideos />
+        </Suspense>
+      },
+      {
+        path:"/subscribed",
+        element: <Subscribed />
       },
       {
         path: "/feedback",
@@ -60,7 +70,7 @@ export const appRouter = createBrowserRouter([
       },
       {
         path: "/video/:vID",
-        element: <VideoPage />,
+        element: <Suspense><VideoPage /></Suspense>,
       },
       {
         path: "/yourvideos",

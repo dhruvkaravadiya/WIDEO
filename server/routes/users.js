@@ -13,9 +13,6 @@ router.delete('/:id',verifyToken,asyncMiddleware(userController.deleteUser));
 router.put('/sub/:id',verifyToken,asyncMiddleware(userController.subscribe));
 //unsubscribe from a channel
 router.put('/unsub/:id',verifyToken,asyncMiddleware(userController.unSubscribe));
-//like a video
-router.put('/like/:videoId',verifyToken,asyncMiddleware(userController.like));
-//dislike a video
-router.put('/dislike/:videoId',verifyToken,asyncMiddleware(userController.dislike));
+
 
 module.exports = router;

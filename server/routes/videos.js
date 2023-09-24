@@ -25,4 +25,9 @@ router.get('/tags',asyncMiddleware(videoController.getVideosByTags));
 router.get('/search',asyncMiddleware(videoController.searchVideosByTitle));
 //get videos of a user
 router.get('/:id',asyncMiddleware(videoController.getVideosByUserID));
+
+//like a video
+router.put('/like/:id',verifyToken,asyncMiddleware(videoController.like));
+//dislike a video
+router.put('/dislike/:id',verifyToken,asyncMiddleware(videoController.dislike));
 module.exports = router;
