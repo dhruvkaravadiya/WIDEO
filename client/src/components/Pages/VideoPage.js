@@ -18,7 +18,6 @@ import { PiShareFat } from "react-icons/pi";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import axios from "axios";
 
-
 export default function VideoPage() {
   const [videos, setVideos] = useState([]);
   const { vID } = useParams();
@@ -148,6 +147,7 @@ export default function VideoPage() {
               <source src={videoUrl} type="video/mp4" />
               Sorry, your browser doesn't support embedded videos.
             </video>
+            
           ) : (
             <p>Loading video...</p>
           )}

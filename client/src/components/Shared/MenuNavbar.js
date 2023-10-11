@@ -74,7 +74,7 @@ function MenuNavbar() {
             </a>
           </div>
           <div className="flex flex-row">
-            <NewVideo />
+          
             {isLoggedIn
               ?
               <div

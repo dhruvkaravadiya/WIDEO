@@ -6,7 +6,7 @@ const verifyToken = require('../middlewares/verifyToken');
 //Find Video
 router.get('/find/:id',asyncMiddleware(videoController.getVideo));
 //Delete Video
-router.delete('/:id',verifyToken,asyncMiddleware(videoController.deleteVideo));
+router.delete('/delete/:id',verifyToken,asyncMiddleware(videoController.deleteVideo));
 //New Video
 router.post('/',verifyToken,asyncMiddleware(videoController.addVideo));
 //Edit Video

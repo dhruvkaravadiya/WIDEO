@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Archivo&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Sansita&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Mooli&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -12,6 +13,9 @@
 }
 .font-sansita{
     font-family: 'Sansita', sans-serif;
+}
+.font-mooli{
+    font-family: 'Mooli', sans-serif;
 }
 /* 171923 , 1A202C , 292B34 , 38B2AC , 222f46 */
 body{

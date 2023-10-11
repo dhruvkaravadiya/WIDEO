@@ -16,11 +16,14 @@ async function addVideo(req, res) {
 }
 
 async function editVideo(req, res) {
+  console.log(req.user.id);
   const video = await Video.findById(req.params.id);
   if (!video) {
     return res.status(404).send("Video Not Found");
   }
-  if (req.user.id == video.userId) {
+  console.log(video.user.id);
+  
+  if (video.user.id == req.user.id) {
     const updatedVideo = await Video.findByIdAndUpdate(
       req.params.id,
       { $set: req.body },
@@ -37,7 +40,7 @@ async function deleteVideo(req, res) {
   if (!video) {
     return res.status(404).send("Video Not Found");
   }
-  if (req.user.id == video.userId) {
+  if (req.user.id == video.user.id) {
     await Video.findByIdAndDelete(req.params.id);
     return res.status(200).send("Video has been deleted");
   } else {

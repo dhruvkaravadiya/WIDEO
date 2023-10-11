@@ -7,7 +7,7 @@ const VideoCard = ({ video }) => {
 
   return (
     <>
-      <div className="bg-[#222f46] hover:bg-slate-700 rounded-2xl p-4 cursor-pointer w-full">
+      <div className="bg-[#222f46] hover:bg-slate-700 rounded-xl p-4 cursor-pointer w-full">
         <div className="mb-4">
           <img
             src={video.imgUrl}
