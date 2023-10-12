@@ -20,7 +20,7 @@ export default function FeedbackPage() {
 
   <div className="flex items-center justify-center">
     <div className="mb-12 w-full lg:w-5/12">
-      <htmlForm>
+      <form>
         <div className="mb-6">
           <label htmlFor="name" className="block mb-1 text-slate-400 font-semibold">Name</label>
           <input type="text" id="name" name="name" className="w-full text-white bg-[#222f46] px-3 py-2 rounded focus:bg-gray-600 focus:outline-none" placeholder="Your name" />
@@ -42,7 +42,7 @@ export default function FeedbackPage() {
         <button type="button" className="w-full bg-blue-700 text-white py-2 px-6 rounded shadow-md transition duration-300 ease-in-out hover:bg-primary-600 focus:outline-none focus:ring focus:ring-primary">
           Send
         </button>
-      </htmlForm>
+      </form>
     </div>
     
   </div>

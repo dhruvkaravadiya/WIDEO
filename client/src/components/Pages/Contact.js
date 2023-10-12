@@ -7,13 +7,13 @@ export default function Contact() {
   return (
     <>
 
-      <div class="my-auto mx-auto">
+      <div className="my-auto mx-auto">
 
-        <div class=" mt-14 p-4 w-full  rounded-lg border border-gray-200 shadow-md bg-[#222f46] dark:border-gray-700">
-              <div class="flex flex-col items-center p-4">
-            <img class="mb-3 w-48 ring-8 h-48 rounded-full shadow-lg" src={myImg} alt="Dev Phot" />
-            <h3 class="mb-1 text-3xl font-medium text-gray-900 dark:text-white">Dhruv Karavadiya</h3>
-            <span class="text-sm text-gray-500 dark:text-gray-400">Full Stack Web Developer</span>
+        <div className=" mt-14 p-4 w-full  rounded-lg border border-gray-200 shadow-md bg-[#222f46] dark:border-gray-700">
+              <div className="flex flex-col items-center p-4">
+            <img className="mb-3 w-48 ring-8 h-48 rounded-full shadow-lg" src={myImg} alt="Dev Phot" />
+            <h3 className="mb-1 text-3xl font-medium text-gray-900 dark:text-white">Dhruv Karavadiya</h3>
+            <span className="text-sm text-gray-500 dark:text-gray-400">Full Stack Web Developer</span>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6">
               {/* Item 1 */}
               <div className="ml-2 p-4  flex flex-row items-center">
