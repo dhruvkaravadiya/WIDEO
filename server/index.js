@@ -21,7 +21,6 @@ mongoose
     throw err;
   });
 app.use(cors({
-  origin: "http://localhost:1234",
   credentials: true,
 }));
 app.use(cookieParser());
@@ -31,6 +30,6 @@ app.use('/api/users', userRoutes);
 app.use('/api/videos', videosRoutes);
 app.use('/api/comments', commentRoutes);
 app.use(error);
-app.listen(3333, () => {
+app.listen(process.env.PORT || 3333, () => {
   console.log("Listening at Port 3333");
 });
