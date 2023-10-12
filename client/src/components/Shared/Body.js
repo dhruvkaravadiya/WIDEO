@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import VideoCard from "./VideoCard";
 import Shimmer from "../Helpers/Shimmer";
-import NotFound from '../Pages/NotFound';
 import { Link } from "react-router-dom";
 import { getRandomVideos } from "../../api/video";
+import RobotGif from '../../assets/images/404 Robot.gif'
+import { AiOutlineArrowLeft } from "react-icons/ai";
+
 export default function Body({ sidebarOpen }) {
   const [videos, setVideos] = useState([]);
   const [filterVideos, setFilterVideos] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [searchActive, setSearchActive] = useState(false);
 
   const setRandomVideos = async () => {
     try {
@@ -20,17 +23,24 @@ export default function Body({ sidebarOpen }) {
   };
 
   const performSearch = () => {
-    // Simple search logic based on the entire title
     const searchTextLower = searchText.toLowerCase();
     const filteredVideos = videos.filter((video) =>
       video.title.toLowerCase().includes(searchTextLower)
     );
     setFilterVideos(filteredVideos);
+    setSearchActive(true);
+  };
+
+  //reset each state variable
+  const resetBody = () => {
+    setSearchText(""); 
+    setSearchActive(false);
+    setRandomVideos();
+    setFilterVideos([]); 
   };
 
   useEffect(() => {
     setRandomVideos();
-    
   }, []);
 
   useEffect(() => {
@@ -40,18 +50,28 @@ export default function Body({ sidebarOpen }) {
   function DisplayCards() {
     if (videos?.length === 0) {
       return <Shimmer />;
-    } else if (filterVideos?.length > 0) {
+    } else if (searchActive && filterVideos.length > 0) {
       return (
         <div className="w-full grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grip-cols-4">
           {filterVideos.map((video) => (
-            <Link to={"/video/"+video._id} key={video._id} >
-            <VideoCard video={video} />
+            <Link to={"/video/" + video._id} key={video._id}>
+              <VideoCard video={video} />
             </Link>
           ))}
         </div>
       );
-    } else if (filterVideos?.length === 0) {
-      return <NotFound />;
+    } else {
+      return (
+        <>
+          <div className="flex flex-col gap-5 mt-14 justify-center bg-indigo text-white">
+            <img src={RobotGif} className='self-center rounded-2xl' alt="not found" width={300} height={300} />
+            
+            <button onClick={resetBody}  className='px-4 py-3 bg-[#24324b] flex gap-2 items-center justify-center hover:bg-[#30415e] rounded-md border-skyblue mt-3 text-sm font-montserrat w-max self-center'>
+              <AiOutlineArrowLeft /> <span>Go Back</span>
+            </button>
+          </div>
+        </>
+      );
     }
   }
 

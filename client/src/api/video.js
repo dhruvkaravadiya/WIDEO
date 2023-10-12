@@ -37,8 +37,11 @@ export const getVideoById = async (videoId) => {
       return await api.get(`/find/${videoId}`);
 };
 
-export const viewVideo = async (videoId) => {
-      return await api.put('/:id',videoId);
+export const viewVideo = async (id) => {
+      console.log("Video Id : "+id);
+      const response = await api.put(`/view/${id}`);
+      console.log(response.data);
+      return response;
 }
 
 export const newVideo = async (video) => {

@@ -58,7 +58,7 @@ export const {
       addComment,
       likeVideo,
       dislikeVideo,
-      clearVideoState,
+      clearVideoState
 } = videoSlice.actions;
 
 export default videoSlice.reducer;

@@ -1,7 +1,12 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-const AddVideo = () => {
+import { Link } from "react-router-dom";
+
+const EditVideo = () => {
+  const { videoId } = useParams();
+  const navigate = useNavigate();
+
   const [videoDetails, setVideoDetails] = useState({
     title: "",
     description: "",
@@ -9,23 +14,44 @@ const AddVideo = () => {
     imgUrl: "",
   });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setVideoDetails({ ...videoDetails, [name]: value });
-  };
-
   const api = axios.create({
     withCredentials:true,
     baseURL:"http://localhost:3333/api/videos"
   });
 
+  const [newTag, setNewTag] = useState("");
+
+  useEffect(() => {
+    const fetchVideoDetails = async () => {
+      try {
+        const response = await api.get(`/find/${videoId}`);
+        const videoData = response.data;
+        setVideoDetails({
+          title: videoData.title,
+          description: videoData.description,
+          tags: videoData.tags,
+          imgUrl: videoData.imgUrl,
+        });
+      } catch (error) {
+        console.error("Error fetching video details:", error);
+      }
+    };
+
+    fetchVideoDetails();
+  }, [videoId]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setVideoDetails({ ...videoDetails, [name]: value });
+  };
+
   const handleAddTag = () => {
-    if (videoDetails.newTag.trim() !== "") {
+    if (newTag.trim() !== "") {
       setVideoDetails({
         ...videoDetails,
-        tags: [...videoDetails.tags, videoDetails.newTag],
-        newTag: "", // Clear the newTag field after adding it
+        tags: [...videoDetails.tags, newTag],
       });
+      setNewTag("");
     }
   };
 
@@ -34,21 +60,11 @@ const AddVideo = () => {
     setVideoDetails({ ...videoDetails, tags: updatedTags });
   };
 
-  const handleThumbnailUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setVideoDetails({ ...videoDetails, imgUrl: e.target.result });
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      await api.put("/", videoDetails);
+      await api.put(`/${videoId}`, videoDetails);
       console.log("Success Edit");
     } catch (error) {
       console.error("Error updating video:", error);
@@ -62,11 +78,11 @@ const AddVideo = () => {
   };
 
   return (
-    <div className="bg-lightblue1 p-6 rounded-lg mx-auto mt-28 grid grid-cols-1 gap-4 border border-gray-700 h-fit shadow-[0_3px_10px_rgb(0,0,0,0.2)] sm:grid-cols-2">
+    <div className="bg-lightblue1 p-6 rounded-lg mx-auto mt-28 grid grid-cols-1 gap-4 border border-gray-700 h-fit shadow-[0_3px_10px_rgb(0,0,0,0.2)]  sm:grid-cols-2">
       <div className="col-span-1 me-3">
-        <h2 className="text-2xl font-bold text-[#43a3fc] mb-4">Add Video</h2>
+        <h2 className="text-2xl font-bold text-[#43a3fc] mb-4">Edit Video</h2>
         <label htmlFor="title" className="block text-gray-400 font-semibold mb-2">
-          Title:
+          Title :
         </label>
         <input
           type="text"
@@ -76,19 +92,9 @@ const AddVideo = () => {
           onChange={handleInputChange}
           className="w-full bg-darkblue2 text-slate-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500 mb-4"
         />
-        <label htmlFor="description" className="block text-gray-400 font-semibold mb-2">
-          Description:
-        </label>
-        <textarea
-          id="description"
-          name="description"
-          value={videoDetails.description}
-          onChange={handleInputChange}
-          className="w-full bg-darkblue2 text-slate-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500 resize-none h-60 mb-4"
-        />
         <div className="mb-4 relative">
           <label htmlFor="thumbnailUrl" className="block text-gray-400 font-semibold mb-2">
-            Thumbnail:
+            Thumbnail :
           </label>
           <div
             className={`w-full h-52 mb-2 ${
@@ -116,7 +122,7 @@ const AddVideo = () => {
               id="thumbnailUrl"
               name="thumbnailUrl"
               accept="image/*"
-              onChange={handleThumbnailUpload}
+              onChange={handleInputChange}
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
             />
           </div>
@@ -130,8 +136,18 @@ const AddVideo = () => {
       </div>
       <div className="col-span-1 ms-3">
         <form onSubmit={handleSubmit}>
+          <label htmlFor="description" className="block text-gray-400 font-semibold mb-2">
+            Description :
+          </label>
+          <textarea
+            id="description"
+            name="description"
+            value={videoDetails.description}
+            onChange={handleInputChange}
+            className="w-full bg-darkblue2 text-slate-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500 resize-none h-60 mb-4"
+          />
           <label htmlFor="tags" className="block text-gray-400 font-semibold mb-2">
-            Tags:
+            Tags :
           </label>
           <div className="flex flex-wrap gap-2">
             {videoDetails.tags.map((tag, index) => (
@@ -168,10 +184,10 @@ const AddVideo = () => {
               type="text"
               id="newTag"
               name="newTag"
-              value={videoDetails.newTag}
-              onChange={handleInputChange}
+              value={newTag}
+              onChange={(e) => setNewTag(e.target.value)}
               placeholder="Add a new tag"
-              className="bg-darkblue2 text-slate-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
+              className=" bg-darkblue2 text-slate-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
             />
             <button
               type="button"
@@ -203,4 +219,4 @@ const AddVideo = () => {
   );
 };
 
-export default AddVideo;
+export default EditVideo;

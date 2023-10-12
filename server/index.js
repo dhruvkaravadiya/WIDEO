@@ -20,15 +20,17 @@ mongoose
     console.log(err.message);
     throw err;
   });
-  app.use(cors({origin: "http://localhost:1234", // Replace with your frontend origin
-  credentials: true,}));
-  app.use(cookieParser());
-  app.use(express.json());
-  app.use('/api/auth',authRoutes);
-  app.use('/api/users',userRoutes);
-  app.use('/api/videos',videosRoutes);
-  app.use('/api/comments',commentRoutes);
-  app.use(error);
-  app.listen(3333, () => {
+app.use(cors({
+  origin: "http://localhost:1234",
+  credentials: true,
+}));
+app.use(cookieParser());
+app.use(express.json());
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/videos', videosRoutes);
+app.use('/api/comments', commentRoutes);
+app.use(error);
+app.listen(3333, () => {
   console.log("Listening at Port 3333");
 });
