@@ -35,7 +35,10 @@
     "react-modal": "^3.16.1",
     "react-redux": "^8.1.2",
     "react-router-dom": "^6.16.0",
+<<<<<<< HEAD
     "react-share-social": "^0.1.55",
+=======
+>>>>>>> 5d614bb9cea42a510312d64d2113aa51932a70ad
     "react-toastify": "^9.1.3",
     "redux-persist": "^6.0.0",
     "styled-components": "^6.0.3"

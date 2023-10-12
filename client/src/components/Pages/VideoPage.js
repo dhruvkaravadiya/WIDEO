@@ -16,7 +16,10 @@ import { BiLike, BiDislike } from "react-icons/bi";
 import { PiShareFat } from "react-icons/pi";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import axios from "axios";
+<<<<<<< HEAD
 import { toast } from "react-toastify";
+=======
+>>>>>>> 5d614bb9cea42a510312d64d2113aa51932a70ad
 
 export default function VideoPage() {
   const [videos, setVideos] = useState([]);
