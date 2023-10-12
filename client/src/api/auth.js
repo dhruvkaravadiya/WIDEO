@@ -12,8 +12,10 @@ export const registerUser = async (credentials) => {
 };
 
 export const loginUser = async (credentials) => {
+
   console.log("Client Side - Login Method Called");
   const response = await api.post('/signin', credentials);
+  console.log("Login response : ", response.data);
   return response;
 };
 

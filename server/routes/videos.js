@@ -6,12 +6,12 @@ const verifyToken = require('../middlewares/verifyToken');
 //Find Video
 router.get('/find/:id',asyncMiddleware(videoController.getVideo));
 //Delete Video
-router.delete('/:id',verifyToken,asyncMiddleware(videoController.deleteVideo));
+router.delete('/delete/:id',verifyToken,asyncMiddleware(videoController.deleteVideo));
 //New Video
 router.post('/',verifyToken,asyncMiddleware(videoController.addVideo));
 //Edit Video
 router.put('/:id',verifyToken,asyncMiddleware(videoController.editVideo));
-//view a Video
+//increase video of a Video
 router.put('/view/:id',asyncMiddleware(videoController.addView));
 //trending Videos
 router.get('/trending',asyncMiddleware(videoController.getTrendingVideos));

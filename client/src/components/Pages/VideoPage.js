@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useParams,Link } from "react-router-dom";
+import { useParams,Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import Cookies from "js-cookie";
-import { getRandomVideos } from "../../api/video";
+import { getRandomVideos, viewVideo } from "../../api/video";
 import {
   setVideo,
   setUser,
@@ -17,23 +16,27 @@ import { BiLike, BiDislike } from "react-icons/bi";
 import { PiShareFat } from "react-icons/pi";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import axios from "axios";
-
+import { toast } from "react-toastify";
 
 export default function VideoPage() {
   const [videos, setVideos] = useState([]);
   const { vID } = useParams();
   const dispatch = useDispatch();
-
+ 
   const [showDescription, setShowDescription] = useState(false);
 
   const video = useSelector((state) => state.video.video);
   const user = useSelector((state) => state.video.user);
   const currUser = useSelector((state) => state.auth.user);
-
+  const isLoggedIn = useSelector((state)=>state.auth.isLoggedIn);
+  const videoUrl = video.videoUrl;
+  const isMobileScreen = window.innerWidth <= 768;
+  const navigate = useNavigate();
   const api = axios.create({
     baseURL: 'http://localhost:3333/api',
     withCredentials: true,
   });
+
   //date formatter
   function formatRelativeDate(createdAt) {
     const currentDate = new Date();
@@ -73,28 +76,24 @@ export default function VideoPage() {
 
   //Subscribe to a channel
   const handleSubscription = async () => {
-    console.log("state user : ", currUser);
-    console.log("channel : ", user);
-    try {
-      // Check if the user is authenticated
-      if (!currUser) {
-        // Handle the case where the user is not logged in
-        console.log("User is not authenticated haha.");
-        return;
+    console.log("Subscirbe button user : ",currUser.id);
+      if (!isLoggedIn) {
+        navigate('/login');
+        toast.info("Login to Access this feature");
       }
-      if (user.subscribers?.includes(currUser.id)) {
-        await api.put('/users/unsub/' + user._id);
-      } else {
-        await api.put(`/users/sub/${user._id}`);
+      else{
+        if (user.subscribers.includes(currUser.id)) {
+          await api.put('/users/unsub/' + currUser.id);
+        } else if (user.subscribers.includes(currUser.id) == false){
+          await api.put(`/users/sub/${currUser.id}`);
+        }
       }
       dispatch(subUnSub(currUser.id));
-    } catch (error) {
-      console.log(error);
-    }
   };
   //Like a video
   const handleLike = async () => {
     if (!currUser) {
+
       console.log("User is not authenticated haha.");
       return;
     }
@@ -112,7 +111,7 @@ export default function VideoPage() {
   }
   //fetch video data
   const handleFetchData = async () => {
-
+    console.log(user);
     try {
       const videoRes = await fetch("http://localhost:3333/api/videos/find/" + vID);
       const videoData = await videoRes.json();
@@ -121,14 +120,28 @@ export default function VideoPage() {
 
       dispatch(setVideo(videoData));
       dispatch(setUser(userData));
-
     } catch (error) {
       console.error("Error fetching video details:", error);
       // Make sure to finish loading in case of an error
     }
   };
+
+  //increase the video view
+  const increaseView = async () => {
+    console.log("here  : ",vID);
+    video.views = video.views + 1;
+    await viewVideo(vID);
+  }
+
+  //function to force increaseView function
+  //to get executed after fetching video
+  const fetchDataAndIncreaseView = async () => {
+    await handleFetchData(); 
+    increaseView();
+  };
   useEffect(() => {
-    handleFetchData();
+    console.log("Curr User : ",currUser);
+    fetchDataAndIncreaseView();
     setRandomVideos();
     // Handle clear state on unmount
     return () => {
@@ -137,17 +150,16 @@ export default function VideoPage() {
 
   }, [dispatch, vID]);
 
-  const videoUrl = video.videoUrl;
-  const isMobileScreen = window.innerWidth <= 768;
   return !videoUrl ? <VideoPageShimmer /> : (
     <div className="mt-14 w-full scroll-m-3 h-screen lg:px-10 flex gap-5 sm:px-3 md:px-4 ">
       <div className="md:w-8/12">
         <div className="mt-4">
           {videoUrl ? (
-            <video controls preload="auto" poster={video.imgUrl} className="h-50vh rounded-2xl sm:w-full">
+            <video autoPlay controls preload="auto" poster={video.imgUrl} className="h-50vh rounded-2xl sm:w-full">
               <source src={videoUrl} type="video/mp4" />
               Sorry, your browser doesn't support embedded videos.
             </video>
+            
           ) : (
             <p>Loading video...</p>
           )}
@@ -174,7 +186,7 @@ export default function VideoPage() {
               {/* Conditionally apply justify-end class for "Subscribe" button */}
               <div className={`flex ${isMobileScreen ? 'justify-end' : ''}`}>
                 <button onClick={handleSubscription} className="p-2 px-3 text-black font-bold test-md bg-[#2eacd6] rounded-3xl ms-6">
-                  {user.subscribers?.includes(currUser._id) ? "Unsubscribe" : "Subscribe"}
+                  {user.subscribers?.includes(currUser.id) ? "Unsubscribe" : "Subscribe"}
                 </button>
               </div>
             </div>

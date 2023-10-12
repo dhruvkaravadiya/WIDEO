@@ -1,21 +1,23 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
-import NewVideo from "../Pages/NewVideo";
 import Websitelogo from "../../../public/icon-512.png";
 import { GoHomeFill } from "react-icons/go";
-import { MdSubscriptions,MdWatchLater, MdFeedback, MdVideoLibrary, MdHistory } from "react-icons/md";
+import { MdSubscriptions, MdWatchLater, MdFeedback, MdVideoLibrary, MdHistory } from "react-icons/md";
 import { BsGithub, BsFillTelephoneFill } from "react-icons/bs";
-import { BiLibrary, BiSolidLike } from "react-icons/bi";
-import { RiSettings4Fill,RiFireFill } from "react-icons/ri";
+import { BiLibrary, BiSolidLike, BiSolidVideoPlus } from "react-icons/bi";
+import { RiSettings4Fill, RiFireFill } from "react-icons/ri";
 import { HiMiniBars3 } from "react-icons/hi2"
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../api/auth";
 import { logout } from "../../slices/authSlice";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function MenuNavbar() {
   const user = useSelector((state) => state.auth.user);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const dispatch = useDispatch() ;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     const response = await logoutUser();
@@ -23,6 +25,16 @@ function MenuNavbar() {
     localStorage.removeItem("userData");
     console.log(response);
   };
+
+  const checkLogin = () => {
+    if(isLoggedIn){
+      navigate('/newvideo');
+    }
+    else{
+      navigate('/login');
+      toast.info("Login to Access this feature");
+    }
+  }
 
   const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -57,15 +69,12 @@ function MenuNavbar() {
 
   return (
     <>
-      <nav className="fixed top-0 z-50 w-full  border-b border-gray-200 bg-darkblue1 dark:border-gray-700">
+      <nav className="fixed top-0 z-50 w-full border-b border-gray-200 bg-darkblue1 dark:border-gray-700">
         <div className="p-3 flex items-center justify-between">
-          <div
-            className="cursor-pointer p-2 bg-lightblue1 hover:bg-lightblue2 rounded-lg"
-            onClick={toggleSidebar}
-          >
+          <div className="cursor-pointer p-2 bg-lightblue1 hover:bg-lightblue2 rounded-lg" onClick={toggleSidebar}>
             <HiMiniBars3 className="text-white h-5 w-5" />
           </div>
-          <div className="flex-grow flex items-center justify-center">
+          <div className="flex absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <a href="/" className="flex items-center">
               <img src={Websitelogo} className="h-8" alt="FlowBite Logo" />
               <span className="self-center text-xl font-semibold ml-1 text-white">
@@ -73,33 +82,23 @@ function MenuNavbar() {
               </span>
             </a>
           </div>
-          <div className="flex flex-row">
-            <NewVideo />
-            {isLoggedIn
-              ?
-              <div
-                className="mx-2 cursor-pointer relative"
-                onClick={toggleAccountDropdown}>
-                <img
-                  src={user.imgUrl}
-                  className="rounded-full border-2"
-                  width={"32px"}
-                />
+          <div className="flex flex-row gap-3 justify-center items-center">
+            
+              <button onClick={checkLogin} className="px-2 justify-center rounded-lg">
+                <BiSolidVideoPlus className="text-slate-400 w-7 h-7" />
+              </button>
+            
+            {isLoggedIn ? (
+              <div className="cursor-pointer relative" onClick={toggleAccountDropdown}>
+                <img src={user.profileImageUrl} className="rounded-full border-2" width={"32px"} />
                 {accountDropdownOpen && (
-                  <div className="absolute  bg-[#222f46] right-0 w-auto h-auto  border dark:border-gray-700 rounded-lg shadow-lg">
+                  <div className="absolute bg-[#222f46] right-0 w-auto h-auto border dark:border-gray-700 rounded-lg shadow-lg">
                     <div className="p-2 flex flex-col text-white">
-                      <span className="font-archivo text-sm ">
-                        {user.name}
-                      </span>
-                      <span className="font-archivo text-sm ">
-                        {user.email}
-                      </span>
-                      <br />
+                      <span className="font-archivo text-sm">{user.name}</span>
+                      <span className="font-archivo text-sm">{user.email}</span>
                     </div>
-                    <hr className=" mt-1" />
-                    <div className="p-2 text-white hover:bg-slate-700 ">
-                      <br />
-                    </div>
+                    <hr className="mt-1" />
+                    <div className="p-2 text-white hover:bg-slate-700"></div>
                     <hr className="text-black mt-1" />
                     <button onClick={handleLogout} className="p-2 text-red-500 font-bold hover:bg-slate-700">
                       Logout
@@ -107,14 +106,15 @@ function MenuNavbar() {
                   </div>
                 )}
               </div>
-              :
-              <Link to="/login" className="font-semibold text-white px-2 py-1 rounded-lg bg-blue-600">
+            ) : (
+              <Link to="/login" className="font-semibold text-md text-blue-600 px-2 py-1 transition duration-300 ease-in-out transform hover:bg-blue-600 hover:text-darkblue1 rounded-lg border-2 border-blue-600">
                 <button>Login</button>
               </Link>
-            }
+            )}
           </div>
         </div>
       </nav>
+
       <aside
         id="logo-sidebar"
         className={`fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"

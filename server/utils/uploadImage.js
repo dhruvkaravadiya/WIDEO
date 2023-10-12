@@ -39,10 +39,11 @@ cloudinary.config({
 //   }
 // })();
 
-const image1 = 'dog.jpeg';
-cloudinary.uploader.upload(image1, { public_id: "dog" }, function(error, result) {
+const image1 = 'AsliPunjabi.png';
+cloudinary.uploader.upload(image1, { folder:"restaurants", width:250, crop:"scale", public_id: "AsliPunjabi" }, function(error, result) {
   console.log(result);
 });
+
 // const image2 = './cars.webp';
 // cloudinary.uploader.upload(image2, { public_id: "cars" }, function(error, result) {
 //   console.log(result);
