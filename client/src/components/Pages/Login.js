@@ -85,11 +85,8 @@ export default function Login() {
 
   return (
     <div className="flex w-full items-center justify-center min-h-screen ">
-<<<<<<< HEAD
       <div className="w-full mx-6 p-6 sm:w-9/12 md:w-3/12 border border-gray-700 rounded-lg shadow-md bg-[#222f46]">
-=======
-      <div className="w-full p-6 sm:w-9/12 md:w-3/12 border border-gray-700 rounded-lg shadow-md bg-[#222f46]">
->>>>>>> 5d614bb9cea42a510312d64d2113aa51932a70ad
+      
         <h2 className="my-4 text-3xl text-center font-bold mb-6 text-blue-500 dark:text-blue-600">
           Login To WIDEO!
         </h2>
@@ -151,11 +148,7 @@ export default function Login() {
           >
             Login
           </button>
-<<<<<<< HEAD
           <p className="text-sm font-normal text-center text-gray-500 dark:text-gray-400">
-=======
-          <p class="text-sm font-normal text-center text-gray-500 dark:text-gray-400">
->>>>>>> 5d614bb9cea42a510312d64d2113aa51932a70ad
             Don't have an account yet? <a href="#" className="font-semibold text-blue-500 hover:underline">Sign Up</a>
           </p>
         </form>

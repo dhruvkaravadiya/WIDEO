@@ -82,7 +82,6 @@ function MenuNavbar() {
               </span>
             </a>
           </div>
-<<<<<<< HEAD
           <div className="flex flex-row gap-3 justify-center items-center">
             
               <button onClick={checkLogin} className="px-2 justify-center rounded-lg">
@@ -92,20 +91,7 @@ function MenuNavbar() {
             {isLoggedIn ? (
               <div className="cursor-pointer relative" onClick={toggleAccountDropdown}>
                 <img src={user.profileImageUrl} className="rounded-full border-2" width={"32px"} />
-=======
-          <div className="flex flex-row">
-          
-            {isLoggedIn
-              ?
-              <div
-                className="mx-2 cursor-pointer relative"
-                onClick={toggleAccountDropdown}>
-                <img
-                  src={user.imgUrl}
-                  className="rounded-full border-2"
-                  width={"32px"}
-                />
->>>>>>> 5d614bb9cea42a510312d64d2113aa51932a70ad
+
                 {accountDropdownOpen && (
                   <div className="absolute bg-[#222f46] right-0 w-auto h-auto border dark:border-gray-700 rounded-lg shadow-lg">
                     <div className="p-2 flex flex-col text-white">

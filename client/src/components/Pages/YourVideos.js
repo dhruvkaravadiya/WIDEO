@@ -49,10 +49,7 @@ const YourVideos = () => {
       <h1 className="text-2xl font-mooli font-bold text-[#43a3fc] mb-4">Your Videos</h1>
 
       {isLoggedIn ? (
-<<<<<<< HEAD
-=======
         // Display channel details and videos
->>>>>>> 5d614bb9cea42a510312d64d2113aa51932a70ad
         <div className="relative mb-8 overflow-x-auto shadow-lg sm:rounded-lg">
           <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead className="text-gray-700 uppercase bg-lightblue2 dark:text-gray-400">
