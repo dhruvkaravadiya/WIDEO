@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: 'https://blue-violet-antelope-wrap.cyclic.app/api/users',
+  withCredentials:true
 });
 
 export const getUserById = async (uId) => {

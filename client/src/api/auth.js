@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: 'https://blue-violet-antelope-wrap.cyclic.app/api/auth', // Adjust this to match your backend API URL
+  withCredentials:true
 });
 
 export const registerUser = async (credentials) => {
