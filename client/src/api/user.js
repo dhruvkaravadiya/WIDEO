@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3333/api/users',
+  baseURL: 'https://blue-violet-antelope-wrap.cyclic.app/api/users',
 });
 
 export const getUserById = async (uId) => {

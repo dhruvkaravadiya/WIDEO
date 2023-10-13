@@ -1,9 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
-const htext = styled.span`
-  color: #38B2AC;
-  font-weight: bold;
-`;
+
 export default function Home() {
   return (
     <>

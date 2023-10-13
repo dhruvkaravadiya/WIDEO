@@ -1,9 +1,6 @@
 import React from "react";
-import { useContext } from "react";
-import userContext from "../Helpers/UserContext";
 
 const VideoCard = ({ video }) => {
-  const { user } = useContext(userContext);
 
   return (
     <>
