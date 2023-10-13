@@ -6,7 +6,7 @@ const api = axios.create({
 
 
 export const getRandomVideos = async () => {
-      const response =  await api.get('/random');
+      const response =  await api.get('/random',{"Upgrade-Insecure-Requests": 1,"Host": "blue-violet-antelope-wrap.cyclic.app"});
       const data = await response.data;
       return data;
 }
