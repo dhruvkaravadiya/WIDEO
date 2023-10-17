@@ -36,7 +36,7 @@ async function signup(req, res) {
   res
     .status(200)
     .cookie("access_token", token, { expiresIn: new Date(Date.now() + process.env.TOKEN_EXPIRY) })
-    .json({ success: true, token, user });
+    .json({ success: true,access_token: token, user : user });
 }
 
 async function signin(req, res) {
@@ -57,8 +57,9 @@ async function signin(req, res) {
   console.log("Login Success");
 
   res
+  .status(200)
     .cookie("access_token", token , {httpOnly:true})
-    .status(200)
+
     .json({success:true,access_token:token,user:otherProperties});
 }
 

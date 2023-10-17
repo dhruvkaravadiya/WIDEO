@@ -12,12 +12,18 @@ import { logoutUser } from "../../api/auth";
 import { logout } from "../../slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { BiSolidUserCircle } from "react-icons/bi";
 
 function MenuNavbar() {
-  const user = useSelector((state) => state.auth.user);
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const user = useSelector((state) => state.auth.user);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
+  const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const accountDropdownRef = useRef(null);
 
   const handleLogout = async () => {
     const response = await logoutUser();
@@ -27,18 +33,15 @@ function MenuNavbar() {
   };
 
   const checkLogin = () => {
-    if(isLoggedIn){
+    if (isLoggedIn) {
       navigate('/newvideo');
     }
-    else{
+    else {
       navigate('/login');
       toast.info("Login to Access this feature");
     }
   }
 
-  const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const accountDropdownRef = useRef(null);
   // Add a click event listener to the document to close the dropdown
   useEffect(() => {
     const handleDocumentClick = (event) => {
@@ -63,6 +66,7 @@ function MenuNavbar() {
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
+
   const toggleAccountDropdown = () => {
     setAccountDropdownOpen(!accountDropdownOpen);
   };
@@ -83,14 +87,17 @@ function MenuNavbar() {
             </a>
           </div>
           <div className="flex flex-row gap-3 justify-center items-center">
-            
-              <button onClick={checkLogin} className="px-2 justify-center rounded-lg">
-                <BiSolidVideoPlus className="text-slate-400 w-7 h-7" />
-              </button>
-            
+
+            <button onClick={checkLogin} className="px-2 justify-center rounded-lg">
+              <BiSolidVideoPlus className="text-slate-400 w-7 h-7" />
+            </button>
+
             {isLoggedIn ? (
               <div className="cursor-pointer relative" onClick={toggleAccountDropdown}>
-                <img src={user.profileImageUrl} className="rounded-full border-2" width={"32px"} />
+                {!user.profileImageUrl 
+                ? (<BiSolidUserCircle className="w-7 h-7 text-slate-400"/>) 
+                : (<img src={user.profileImageUrl} className="rounded-full border-2" width={"32px"} />
+                )}
 
                 {accountDropdownOpen && (
                   <div className="absolute bg-[#222f46] right-0 w-auto h-auto border dark:border-gray-700 rounded-lg shadow-lg">

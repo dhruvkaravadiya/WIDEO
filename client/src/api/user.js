@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://blue-violet-antelope-wrap.cyclic.app/api/users',
+  baseURL: process.env.API_URL+'/users',
   withCredentials:true
 });
 

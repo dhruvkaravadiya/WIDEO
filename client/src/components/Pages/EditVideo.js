@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
-
+import { toast } from "react-toastify";
 const EditVideo = () => {
   const { videoId } = useParams();
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ const EditVideo = () => {
 
   const api = axios.create({
     withCredentials:true,
-    baseURL:"https://blue-violet-antelope-wrap.cyclic.app/api/videos"
+    baseURL:process.env.API_URL+"/videos"
   });
 
   const [newTag, setNewTag] = useState("");
@@ -66,6 +66,8 @@ const EditVideo = () => {
     try {
       await api.put(`/${videoId}`, videoDetails);
       console.log("Success Edit");
+      navigate('/yourvideos');
+      toast("Video Updated Successfully!");
     } catch (error) {
       console.error("Error updating video:", error);
     }
@@ -126,12 +128,7 @@ const EditVideo = () => {
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
             />
           </div>
-          <button
-            type="button"
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
-          >
-            Upload Thumbnail
-          </button>
+         
         </div>
       </div>
       <div className="col-span-1 ms-3">
@@ -144,7 +141,7 @@ const EditVideo = () => {
             name="description"
             value={videoDetails.description}
             onChange={handleInputChange}
-            className="w-full bg-darkblue2 text-slate-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500 resize-none h-60 mb-4"
+            className="w-full bg-darkblue2 text-slate-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500 resize-none h-48 mb-4"
           />
           <label htmlFor="tags" className="block text-gray-400 font-semibold mb-2">
             Tags :

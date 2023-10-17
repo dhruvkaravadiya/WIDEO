@@ -3,9 +3,10 @@ import { loginUser } from "../../api/auth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../slices/authSlice"
 import { FcGoogle } from "react-icons/fc";
+import { Link } from "react-router-dom";
 
 export default function Login() {
   //we will store the username/email and password in this state variable
@@ -74,7 +75,8 @@ export default function Login() {
       console.log("Headers : " + response.headers);
       console.log("User : " + JSON.stringify(userData));
       console.log("Cookies : ", Cookies.get("access_token"));
-      console.log("Response : " + response.data.user);
+      const data = response.data;
+      console.log("Response : " + data.user.profileImageUrl);
       toast.success("Login Successful");
       navigate("/");
     } catch (err) {
@@ -100,7 +102,7 @@ export default function Login() {
             <span className="bg-[#222f46] px-2 py-1">or</span>
           </div>
           <div>
-            <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">
+            <label htmlFor="name" className="block mb-1 text-sm font-medium text-gray-900 dark:text-slate-400">
               Username
             </label>
             <input
@@ -114,7 +116,7 @@ export default function Login() {
             />
           </div>
           <div>
-            <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label htmlFor="password" className="block mb-1 text-sm font-medium text-gray-900 dark:text-slate-400">
               Password
             </label>
             <input
@@ -148,9 +150,9 @@ export default function Login() {
           >
             Login
           </button>
-          <p className="text-sm font-normal text-center text-gray-500 dark:text-gray-400">
-            Don't have an account yet? <a href="#" className="font-semibold text-blue-500 hover:underline">Sign Up</a>
-          </p>
+          <div className="flex justify-center gap-1"><p className="text-sm font-normal text-center text-gray-500 dark:text-gray-400">
+            Don't have an account yet? </p><Link to='/register' className="font-semibold text-sm text-blue-500 hover:underline">Sign Up</Link></div>
+          
         </form>
       </div>
     </div>

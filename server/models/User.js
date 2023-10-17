@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema(
     },
     img: {
       type: String,
+      default:""
     },
     videos: {
       type: [String],

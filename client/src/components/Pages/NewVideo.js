@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const AddVideo = () => {
+  const navigate = useNavigate(); 
   const [videoDetails, setVideoDetails] = useState({
     title: "",
     description: "",
     tags: [],
-    imgUrl: "",
+    photo: null, // For image upload
+    video: null, // For video upload
   });
 
   const handleInputChange = (e) => {
@@ -14,17 +17,12 @@ const AddVideo = () => {
     setVideoDetails({ ...videoDetails, [name]: value });
   };
 
-  const api = axios.create({
-    withCredentials:true,
-    baseURL:"https://blue-violet-antelope-wrap.cyclic.app/api/videos"
-  });
-
   const handleAddTag = () => {
     if (videoDetails.newTag.trim() !== "") {
       setVideoDetails({
         ...videoDetails,
         tags: [...videoDetails.tags, videoDetails.newTag],
-        newTag: "", // Clear the newTag field after adding it
+        newTag: "",
       });
     }
   };
@@ -34,136 +32,106 @@ const AddVideo = () => {
     setVideoDetails({ ...videoDetails, tags: updatedTags });
   };
 
-  const handleThumbnailUpload = (e) => {
+  const handlephotoUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setVideoDetails({ ...videoDetails, imgUrl: e.target.result });
-      };
-      reader.readAsDataURL(file);
+      setVideoDetails({ ...videoDetails, photo: file });
+    }
+  };
+
+  const handleVideoUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setVideoDetails({ ...videoDetails, video: file });
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("title", videoDetails.title);
+    formData.append("description", videoDetails.description);
+    videoDetails.tags.forEach((tag, index) => {
+      formData.append(`tags[${index}]`, tag);
+    });
+    if (videoDetails.photo) {
+      formData.append("photo", videoDetails.photo);
+    }
+    if (videoDetails.video) {
+      formData.append("video", videoDetails.video);
+    }
+
+    const api = axios.create({
+      withCredentials: true,
+      baseURL: process.env.API_URL+"/videos",
+    });
     try {
-      await api.put("/", videoDetails);
+      await api.post("/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      navigate('/');
       console.log("Success Edit");
     } catch (error) {
       console.error("Error updating video:", error);
     }
   };
 
-  const [isThumbnailHovered, setIsThumbnailHovered] = useState(false);
-
-  const toggleThumbnailHover = () => {
-    setIsThumbnailHovered(!isThumbnailHovered);
-  };
-
   return (
-    <div className="bg-lightblue1 p-6 rounded-lg mx-auto mt-28 grid grid-cols-1 gap-4 border border-gray-700 h-fit shadow-[0_3px_10px_rgb(0,0,0,0.2)] sm:grid-cols-2">
-      <div className="col-span-1 me-3">
-        <h2 className="text-2xl font-bold text-[#43a3fc] mb-4">Add Video</h2>
-        <label htmlFor="title" className="block text-gray-400 font-semibold mb-2">
-          Title:
-        </label>
-        <input
-          type="text"
-          id="title"
-          name="title"
-          value={videoDetails.title}
-          onChange={handleInputChange}
-          className="w-full bg-darkblue2 text-slate-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500 mb-4"
-        />
-        <label htmlFor="description" className="block text-gray-400 font-semibold mb-2">
-          Description:
-        </label>
-        <textarea
-          id="description"
-          name="description"
-          value={videoDetails.description}
-          onChange={handleInputChange}
-          className="w-full bg-darkblue2 text-slate-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500 resize-none h-60 mb-4"
-        />
-        <div className="mb-4 relative">
-          <label htmlFor="thumbnailUrl" className="block text-gray-400 font-semibold mb-2">
-            Thumbnail:
-          </label>
-          <div
-            className={`w-full h-52 mb-2 ${
-              isThumbnailHovered ? "hover:bg-opacity-80" : ""
-            }`}
-            onMouseEnter={toggleThumbnailHover}
-            onMouseLeave={toggleThumbnailHover}
-          >
-            <img
-              src={videoDetails.imgUrl}
-              alt={videoDetails.title}
-              className={`w-full h-full object-cover rounded-md ${
-                isThumbnailHovered ? "filter brightness-50" : ""
-              }`}
-            />
-            {isThumbnailHovered && (
-              <div className="absolute inset-0 flex items-center justify-center text-white font-semibold">
-                <div className="bg-black bg-opacity-50 rounded-md p-2">
-                  Select from local
-                </div>
-              </div>
-            )}
+    <div className="p-6 rounded-lg my-auto border border-gray-600 bg-lightblue1 shadow-md max-w-3xl mx-auto">
+      <h2 className="text-2xl font-bold text-blue-600 mb-4">Add Video</h2>
+      <div className="lg:flex">
+        <div className="lg:w-1/2 lg:me-2">
+          <div className="mb-4">
+            <label htmlFor="title" className="block text-gray-600 font-semibold mb-1">
+              Title:
+            </label>
             <input
-              type="file"
-              id="thumbnailUrl"
-              name="thumbnailUrl"
-              accept="image/*"
-              onChange={handleThumbnailUpload}
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              type="text"
+              id="title"
+              name="title"
+              value={videoDetails.title}
+              onChange={handleInputChange}
+              className="w-full bg-gray-100 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
             />
           </div>
-          <button
-            type="button"
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
-          >
-            Upload Thumbnail
-          </button>
-        </div>
-      </div>
-      <div className="col-span-1 ms-3">
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="tags" className="block text-gray-400 font-semibold mb-2">
-            Tags:
-          </label>
-          <div className="flex flex-wrap gap-2">
-            {videoDetails.tags.map((tag, index) => (
-              <div
-                key={index}
-                className="bg-blue-500 text-white rounded-full px-3 py-1 flex items-center"
-              >
-                {tag}
-                <button
-                  type="button"
-                  className="ml-2"
-                  onClick={() => handleRemoveTag(tag)}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 text-red-500 hover:text-red-600"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-              </div>
-            ))}
+          <div className="mb-4">
+            <label htmlFor="description" className="block text-gray-600 font-semibold mb-1">
+              Description:
+            </label>
+            <textarea
+              id="description"
+              name="description"
+              value={videoDetails.description}
+              onChange={handleInputChange}
+              className="w-full bg-gray-100 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500 resize-none h-48"
+            />
           </div>
-          <div className="flex mt-2">
+          <div className="mb-4">
+            <label htmlFor="tags" className="block text-gray-600 font-semibold mb-2">
+              Tags:
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {videoDetails.tags.map((tag, index) => (
+                <div key={index} className="bg-blue-500 text-white rounded-full px-3 py-1 flex items-center">
+                  {tag}
+                  <button type="button" className="ml-2" onClick={() => handleRemoveTag(tag)}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4 text-red-500 hover:text-red-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="flex mb-4">
             <input
               type="text"
               id="newTag"
@@ -171,7 +139,7 @@ const AddVideo = () => {
               value={videoDetails.newTag}
               onChange={handleInputChange}
               placeholder="Add a new tag"
-              className="bg-darkblue2 text-slate-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
+              className="w-full bg-gray-100 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
             />
             <button
               type="button"
@@ -181,23 +149,59 @@ const AddVideo = () => {
               Add Tag
             </button>
           </div>
-          <div className="mt-4 flex justify-end space-x-2">
-            <Link to="/yourvideos">
-              <button
-                type="button"
-                className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
-              >
-                Cancel
-              </button>
-            </Link>
-            <button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
-            >
-              Save
-            </button>
+        </div>
+        <div className="lg:w-1/2 mt-4 lg:ms-2 lg:mt-0">
+          <div className="mb-4">
+            <label htmlFor="photo" className="block text-gray-600 font-semibold mb-1">
+              Photo:
+            </label>
+            <input
+              type="file"
+              id="photo"
+              name="photo"
+              accept="image/*"
+              onChange={handlephotoUpload}
+              className="w-full bg-gray-100 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
+            />
+            {videoDetails.photo && (
+              <img
+                src={URL.createObjectURL(videoDetails.photo)}
+                alt="Photo Preview"
+                className="mt-2 max-w-xs rounded-md"
+              />
+            )}
           </div>
-        </form>
+          <div className="mb-4">
+            <label htmlFor="video" className="block text-gray-600 font-semibold mb-1">
+              Video:
+            </label>
+            <input
+              type="file"
+              id="video"
+              name="video"
+              accept="video/*"
+              onChange={handleVideoUpload}
+              className="w-full bg-gray-100 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
+            />
+          </div>
+        </div>
+      </div>
+      <div className="flex justify-center space-x-2">
+        <button
+          type="submit"
+          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+          onClick={handleSubmit}
+        >
+          Upload
+        </button>
+        <Link to="/yourvideos">
+          <button
+            type="button"
+            className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+          >
+            Cancel
+          </button>
+        </Link>
       </div>
     </div>
   );
