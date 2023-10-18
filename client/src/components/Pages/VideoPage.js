@@ -113,9 +113,9 @@ export default function VideoPage() {
   const handleFetchData = async () => {
     console.log(user);
     try {
-      const videoRes = await fetch(process.env.API_URL+"/videos/find/" + vID);
+      const videoRes = await fetch("http://localhost:3000/api/videos/find/" + vID);
       const videoData = await videoRes.json();
-      const userRes = await fetch(process.env.API_URL+"/users/find/" + videoData.user.id);
+      const userRes = await fetch("http://localhost:3000/api/users/find/" + videoData.user.id);
       const userData = await userRes.json();
 
       dispatch(setVideo(videoData));

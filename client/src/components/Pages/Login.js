@@ -59,8 +59,7 @@ export default function Login() {
           expires: 12000000,
           secure: true,
           sameSite: "None",
-          httpOnly: true,
-        });
+         });
       }
       // Store user data in localStorage
       localStorage.setItem("userData", JSON.stringify(userData));

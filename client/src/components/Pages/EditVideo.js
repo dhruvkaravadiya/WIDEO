@@ -16,7 +16,7 @@ const EditVideo = () => {
 
   const api = axios.create({
     withCredentials:true,
-    baseURL:process.env.API_URL+"/videos"
+    baseURL:"http://localhost:3000/api/videos"
   });
 
   const [newTag, setNewTag] = useState("");

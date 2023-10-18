@@ -63,7 +63,7 @@ const AddVideo = () => {
 
     const api = axios.create({
       withCredentials: true,
-      baseURL: process.env.API_URL+"/videos",
+      baseURL: "http://localhost:3000/api/videos",
     });
     try {
       await api.post("/", formData, {

@@ -12,12 +12,12 @@ const YourVideos = () => {
   const currUser = useSelector((state) => state.auth.user);
   const [videos, setVideos] = useState([]);
   const api = axios.create({
-    baseURL: process.env.API_URL,
+    baseURL: "http://localhost:3000/api/videos",
     withCredentials: true,
   });
   const getUserVideos = async () => {
     try {
-      const response = await api.get(`videos/${userId}`);
+      const response = await api.get(`/${userId}`);
       setVideos(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -27,7 +27,7 @@ const YourVideos = () => {
   const deleteVideo = async (videoId) => {
     try {
 
-      const response = await api.delete(`videos/delete/${videoId}`);
+      const response = await api.delete(`/delete/${videoId}`);
       if (response.status === 200) {
         // Video deleted successfully, update the video list
         getUserVideos();
