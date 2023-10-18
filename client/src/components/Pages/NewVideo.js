@@ -8,8 +8,8 @@ const AddVideo = () => {
     title: "",
     description: "",
     tags: [],
-    photo: null, // For image upload
-    video: null, // For video upload
+    photo: null, 
+    video: null, 
   });
 
   const handleInputChange = (e) => {
@@ -66,7 +66,7 @@ const AddVideo = () => {
       baseURL: "https://blue-violet-antelope-wrap.cyclic.app/api/videos",
       headers: {
         "Content-Type": "multipart/form-data",
-        "Origin": "https://your-frontend-app.com", // Replace with your actual frontend URL
+        "Origin": "https://wideo-client.vercel.app", // Replace with your actual frontend URL
       },
     });
     try {
