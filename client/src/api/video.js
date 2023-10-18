@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-      baseURL: "http://localhost:3000/api/videos", // Adjust this to match your backend API URL
+      baseURL: "https://blue-violet-antelope-wrap.cyclic.app/api/videos", // Adjust this to match your backend API URL
 });
 
 

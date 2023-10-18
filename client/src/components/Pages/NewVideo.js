@@ -63,7 +63,7 @@ const AddVideo = () => {
 
     const api = axios.create({
       withCredentials: true,
-      baseURL: "http://localhost:3000/api/videos",
+      baseURL: "https://blue-violet-antelope-wrap.cyclic.app/api/videos",
     });
     try {
       await api.post("/", formData, {

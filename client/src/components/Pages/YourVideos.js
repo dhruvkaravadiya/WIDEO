@@ -12,7 +12,7 @@ const YourVideos = () => {
   const currUser = useSelector((state) => state.auth.user);
   const [videos, setVideos] = useState([]);
   const api = axios.create({
-    baseURL: "http://localhost:3000/api/videos",
+    baseURL: "https://blue-violet-antelope-wrap.cyclic.app/api/videos",
     withCredentials: true,
   });
   const getUserVideos = async () => {
