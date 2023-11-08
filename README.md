@@ -40,22 +40,21 @@ WIDEO is a user-centric video sharing application designed to make uploading, vi
 
 The front end of WIDEO is built using modern web technologies to deliver an engaging user experience:
 
-- **React.js**: A powerful JavaScript library for building dynamic user interfaces.
-
-- **HTML/CSS**: For structuring and styling the application.
-
-- **Responsive Design**: Ensuring a seamless experience across various devices.
-
-- 📹 **Video Streaming**: Utilizing video streaming libraries for smooth playback.
+- 🔰 UI Library: **Reactjs**
+- 🔰 Bundler: **Parcel**
+- 🔰 Routing: **React-Router-V6**
+- 🔰 State Management: **Redux-Toolkit**
+- 🔰 Javascript Transpiler: **Babel**
+- 🔰 Styling: **Tailwind CSS**
+- 🔰 Deployed On: **Vercel**
 
 ### Back End
 
 The back end of WIDEO is built on a robust and scalable tech stack:
 
-- **Node.js**: For server-side JavaScript runtime.
-
-- 🚀 **Express.js**: A minimal and flexible Node.js web application framework.
-
-- 📂 **MongoDB**: A NoSQL database for efficient storage and retrieval of video content and metadata.
-
-- 🔐 **Authentication**: Implementing secure user authentication for safeguarding user data.
+- 🔰 Runtime Environment: **Node.js**
+- 🔰 Framework: **Express.js**
+- 🔰 Databse: **MongoDB**
+- 🔰 Authentication: **JWT Authentication**
+- 🔰 File Upload: **Cloudinary**
+- 🔰 Deployed On: **Cyclix**
