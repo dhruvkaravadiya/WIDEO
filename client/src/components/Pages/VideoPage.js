@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams,Link, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getRandomVideos, viewVideo } from "../../api/video";
 import {
@@ -12,7 +12,7 @@ import {
   clearVideoState,
 } from "../../slices/videoPageSlice";
 import VideoPageShimmer from "../Helpers/VideoPageShimmer";
-import { BiLike, BiDislike } from "react-icons/bi";
+import { BiLike, BiDislike, BiSolidLike } from "react-icons/bi";
 import { PiShareFat } from "react-icons/pi";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import axios from "axios";
@@ -22,13 +22,16 @@ export default function VideoPage() {
   const [videos, setVideos] = useState([]);
   const { vID } = useParams();
   const dispatch = useDispatch();
- 
+
   const [showDescription, setShowDescription] = useState(false);
 
   const video = useSelector((state) => state.video.video);
   const user = useSelector((state) => state.video.user);
   const currUser = useSelector((state) => state.auth.user);
-  const isLoggedIn = useSelector((state)=>state.auth.isLoggedIn);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const videoLikes = useSelector((state) => state.video.video.likes);
+  const videoDislikes = useSelector((state) => state.video.video.dislikes);
+
   const videoUrl = video.videoUrl;
   const isMobileScreen = window.innerWidth <= 768;
   const navigate = useNavigate();
@@ -76,39 +79,68 @@ export default function VideoPage() {
 
   //Subscribe to a channel
   const handleSubscription = async () => {
-    console.log("Subscirbe button user : ",currUser.id);
-      if (!isLoggedIn) {
-        navigate('/login');
-        toast.info("Login to Access this feature");
+    console.log("Subscirbe button user : ", currUser.id);
+    if (!isLoggedIn) {
+      navigate('/login');
+      toast.info("Login to Access this feature");
+    }
+    else {
+      if (user.subscribers.includes(currUser.id)) {
+        await api.put('/users/unsub/' + currUser.id);
+      } else if (user.subscribers.includes(currUser.id) == false) {
+        await api.put(`/users/sub/${currUser.id}`);
       }
-      else{
-        if (user.subscribers.includes(currUser.id)) {
-          await api.put('/users/unsub/' + currUser.id);
-        } else if (user.subscribers.includes(currUser.id) == false){
-          await api.put(`/users/sub/${currUser.id}`);
-        }
-      }
-      dispatch(subUnSub(currUser.id));
+    }
+    dispatch(subUnSub(currUser.id));
   };
-  //Like a video
-  const handleLike = async () => {
+// Like a video
+const handleLike = async () => {
+  try {
     if (!currUser) {
+      console.log("User is not authenticated.");
+      return;
+    }
 
-      console.log("User is not authenticated haha.");
-      return;
+    if (videoLikes.includes(currUser.id)) {
+      await api.put(`/videos/removeLike/${video._id}`);
+      dispatch(dislikeVideo(video._id));
+      const updatedLikes = videoLikes.filter(userId => userId !== currUser.id);
+      dispatch(setVideo({ ...video, likes: updatedLikes }));
+    } else {
+      await api.put(`/videos/like/${video._id}`);
+      dispatch(likeVideo(video._id));
+      dispatch(setVideo({ ...video, likes: [...videoLikes, currUser.id] }));
     }
-    await api.put(`/videos/like/${video._id}`);
-    dispatch(likeVideo(video._id));
+  } catch (error) {
+    console.error('Like Request Failed:', error);
+    // Handle the error, such as displaying an error message to the user
   }
-  //dislike a video
-  const handleDisLike = async () => {
+};
+
+// Dislike a video
+const handleDisLike = async () => {
+  try {
     if (!currUser) {
-      console.log("User is not authenticated haha.");
+      console.log("User is not authenticated.");
       return;
     }
-    await api.put(`/videos/dislike/${video._id}`);
-    dispatch(dislikeVideo(video._id));
+    console.log("Video Id : "+video._id);
+    if (videoDislikes.includes(currUser.id)) {
+      await api.put(`/videos/removeDislike/${video._id}`);
+      dispatch(likeVideo(video._id));
+      const updatedDislikes = videoDislikes.filter(userId => userId !== currUser.id);
+      dispatch(setVideo({ ...video, dislikes: updatedDislikes }));
+    } else {
+      await api.put(`/videos/dislike/${video._id}`);
+      dispatch(dislikeVideo(video._id));
+      dispatch(setVideo({ ...video, dislikes: [...videoDislikes, currUser.id] }));
+    }
+  } catch (error) {
+    console.error('Dislike Request Failed:', error);
+    // Handle the error, such as displaying an error message to the user
   }
+};
+
   //fetch video data
   const handleFetchData = async () => {
     console.log(user);
@@ -128,7 +160,7 @@ export default function VideoPage() {
 
   //increase the video view
   const increaseView = async () => {
-    console.log("here  : ",vID);
+    console.log("here  : ", vID);
     video.views = video.views + 1;
     await viewVideo(vID);
   }
@@ -136,11 +168,11 @@ export default function VideoPage() {
   //function to force increaseView function
   //to get executed after fetching video
   const fetchDataAndIncreaseView = async () => {
-    await handleFetchData(); 
+    await handleFetchData();
     increaseView();
   };
   useEffect(() => {
-    console.log("Curr User : ",currUser);
+    console.log("Curr User : ", currUser);
     fetchDataAndIncreaseView();
     setRandomVideos();
     // Handle clear state on unmount
@@ -159,7 +191,7 @@ export default function VideoPage() {
               <source src={videoUrl} type="video/mp4" />
               Sorry, your browser doesn't support embedded videos.
             </video>
-            
+
           ) : (
             <p>Loading video...</p>
           )}
@@ -195,7 +227,8 @@ export default function VideoPage() {
               <div className="flex flex-row bg-lightblue1 rounded-3xl">
 
                 <button onClick={handleLike} className="flex flex-row rounded-l-3xl hover:bg-lightblue2">
-                  <BiLike className="p-2 w-10 h-10 text-slate-400  rounded-l-3xl" />
+                  {video.likes.includes(currUser.id) ? <BiSolidLike className="p-2 w-10 h-10 text-slate-400  rounded-l-3xl" /> : <BiLike className="p-2 w-10 h-10 text-slate-400  rounded-l-3xl" />}
+
                   <span className="text-slate-400 my-auto me-2 font-md">{video.likes?.length} likes</span>
                 </button>
 
@@ -246,20 +279,20 @@ export default function VideoPage() {
       </div>
       <div className=" h-full md:w-4/12 p-2 flex flex-col items-start">
         <h1 className="font-bold text-3xl my-3 text-sky-600 text-archivo">Recommonded</h1>
-        {videos.map((vid)=>(
-          <Link to={"/video/"+vid._id} key={vid._id} >
-          <div className="w-full my-2 h-28 flex flex-row cursor-pointer p-1 rounded-lg">
-            <img src={vid.imgUrl} key={vid._id} alt={vid.title} className="h-26 w-40 rounded-xl" />
-            <div className=" ms-4 mt-1 flex flex-col">
-              <span className="text-md font-bold text-slate-200">{vid.title}</span>
-              <span className="text-md font-semibold text-slate-500">{vid.user.name}</span>
-              <span className="text-md font-semibold text-slate-500">
-                {vid.views} views - {formatRelativeDate(vid.createdAt)}
-              </span>
+        {videos.map((vid) => (
+          <Link to={"/video/" + vid._id} key={vid._id} >
+            <div className="w-full my-2 h-28 flex flex-row cursor-pointer p-1 rounded-lg">
+              <img src={vid.imgUrl} key={vid._id} alt={vid.title} className="h-26 w-40 rounded-xl" />
+              <div className=" ms-4 mt-1 flex flex-col">
+                <span className="text-md font-bold text-slate-200">{vid.title}</span>
+                <span className="text-md font-semibold text-slate-500">{vid.user.name}</span>
+                <span className="text-md font-semibold text-slate-500">
+                  {vid.views} views - {formatRelativeDate(vid.createdAt)}
+                </span>
+              </div>
             </div>
-          </div>
           </Link>
-        ))} 
+        ))}
       </div>
     </div>
   )
