@@ -137,6 +137,25 @@ async function dislike(req, res) {
   });
   res.status(200).send("DisLiked the Video");
 }
+
+//remove a dislike
+async function removelike(req,res){
+  const userId = req.user.id;
+  if(!userId){
+    return res.status(400).send("Id not given");
+  }
+  const videoId = req.params.id;
+  if(!videoId){
+    return res.status(400).send("Video Id missing");
+  }
+  await Video.findByIdAndUpdate(
+    { _id: videoId },
+    { $pull: { likes: userId } },
+    { new: true }
+  );
+  return res.status(200).send("Like Removed");
+}
+
 module.exports = {
   addVideo,
   editVideo,
@@ -150,5 +169,6 @@ module.exports = {
   getVideosByTags,
   getVideosByUserID,
   like,
-  dislike
+  dislike,
+  removelike
 };
