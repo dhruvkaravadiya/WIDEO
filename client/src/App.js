@@ -13,7 +13,7 @@ const SignUp = lazy(() => import("./components/Pages/SignUp"));
 const YourVideos = lazy(() => import("./components/Pages/YourVideos"));
 const TrendVideos = lazy(() => import("./components/Pages/TrendVideos"));
 
-import { createBrowserRouter, Outlet } from "react-router-dom";
+import { createHashRouter, Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Provider } from 'react-redux';
@@ -40,7 +40,7 @@ export default function App() {
     </Provider>
   );
 }
-export const appRouter = createBrowserRouter([
+export const appRouter = createHashRouter([
   {
     path: "/",
     element: <App />,
