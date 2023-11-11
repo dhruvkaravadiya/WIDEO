@@ -2,15 +2,17 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+
 const AddVideo = () => {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [videoDetails, setVideoDetails] = useState({
     title: "",
     description: "",
     tags: [],
-    photo: null, 
-    video: null, 
+    photo: null,
+    video: null,
   });
+  const [validationErrors, setValidationErrors] = useState({});
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -46,41 +48,64 @@ const AddVideo = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("title", videoDetails.title);
-    formData.append("description", videoDetails.description);
-    videoDetails.tags.forEach((tag, index) => {
-      formData.append(`tags[${index}]`, tag);
-    });
-    if (videoDetails.photo) {
-      formData.append("photo", videoDetails.photo);
-    }
-    if (videoDetails.video) {
-      formData.append("video", videoDetails.video);
+  const validateForm = () => {
+    const errors = {};
+
+    if (!videoDetails.title.trim()) {
+      errors.title = "Title is required";
     }
 
-    const api = axios.create({
-      withCredentials: true,
-      baseURL: "https://blue-violet-antelope-wrap.cyclic.app/api/videos",
-      headers: {
-        "Content-Type": "multipart/form-data",
-        "Origin": "https://wideo-client.vercel.app", // Replace with your actual frontend URL
-      },
-    });
-    try {
-      await api.post("/", formData, {
+    if (!videoDetails.description.trim()) {
+      errors.description = "Description is required";
+    }
+
+    if (videoDetails.tags.length === 0) {
+      errors.tags = "At least one tag is required";
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (validateForm()) {
+      const formData = new FormData();
+      formData.append("title", videoDetails.title);
+      formData.append("description", videoDetails.description);
+      videoDetails.tags.forEach((tag, index) => {
+        formData.append(`tags[${index}]`, tag);
+      });
+      if (videoDetails.photo) {
+        formData.append("photo", videoDetails.photo);
+      }
+      if (videoDetails.video) {
+        formData.append("video", videoDetails.video);
+      }
+
+      const api = axios.create({
+        withCredentials: true,
+        baseURL: "https://blue-violet-antelope-wrap.cyclic.app/api/videos",
         headers: {
           "Content-Type": "multipart/form-data",
+          Origin: "https://wideo-client.vercel.app", // Replace with your actual frontend URL
         },
       });
-      navigate('/');
-      console.log("Success Edit");
-    } catch (error) {
-      console.error("Error updating video:", error);
+
+      try {
+        await api.post("/", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        navigate("/");
+        console.log("Success Edit");
+      } catch (error) {
+        console.error("Error updating video:", error);
+      }
     }
-  };
+  }
 
   return (
     <div className="p-6 rounded-lg my-auto border border-gray-600 bg-lightblue1 shadow-md max-w-3xl mx-auto">
@@ -192,7 +217,7 @@ const AddVideo = () => {
       </div>
       <div className="flex justify-center space-x-2">
         <button
-          type="submit"
+          type="button"
           className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
           onClick={handleSubmit}
         >
