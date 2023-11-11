@@ -6,9 +6,7 @@ import myImg from '../../assets/images/dev.jpeg';
 export default function Contact() {
   return (
     <>
-
       <div className="my-auto mx-auto">
-
         <div className=" mt-14 p-4 w-full  rounded-lg border border-gray-200 shadow-md bg-[#222f46] dark:border-gray-700">
               <div className="flex flex-col items-center p-4">
             <img className="mb-3 w-48 ring-8 h-48 rounded-full shadow-lg" src={myImg} alt="Dev Phot" />
@@ -23,7 +21,7 @@ export default function Contact() {
                     Email Us
                   </h3>
                   
-                  <a href="dhruvkaravadiya22@gmail.com" className="text-blue-500">
+                  <a href={process.env.GOOGLE_CONTACT_URL} className="text-blue-500">
                     @dhruvkaravadiya
                   </a>
                 </div>
@@ -36,7 +34,7 @@ export default function Contact() {
                     LinkedIn
                   </h3>
                   <a
-                    href="https://linkedin.com/in/dhruvkaravadiya"
+                    href={process.env.LINKEDIN_URL}
                     className="text-blue-500"
                   >
                     /in/dhruvkaravadiya
@@ -50,7 +48,7 @@ export default function Contact() {
                   <h3 className="text-lg text-gray-200 font-semibold">
                     Whatsapp Us
                   </h3>
-                  <p className="text-blue-500">+91-9824275281</p>
+                  <a href={process.env.WATSAPP_CONTACT_URL} className="text-blue-500">+91-9824275281</a>
                 </div>
               </div>
               {/* Item 1 */}
@@ -59,7 +57,7 @@ export default function Contact() {
                 <div>
                   <h3 className="text-lg text-gray-200 font-semibold">Github</h3>
                   <a
-                    href="https://github.com/dhruvkaravadiya"
+                    href={process.env.GITHUB_URL}
                     className="text-blue-500"
                   >
                     /dhruvkaravadiya
