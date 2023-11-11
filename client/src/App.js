@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useState, useEffect } from "react";
+import React, { lazy, Suspense } from "react";
 import "./assets/css/index.css";
 import Body from "./components/Shared/Body";
 import MenuNavbar from "./components/Shared/MenuNavbar";
@@ -13,7 +13,7 @@ const SignUp = lazy(() => import("./components/Pages/SignUp"));
 const YourVideos = lazy(() => import("./components/Pages/YourVideos"));
 const TrendVideos = lazy(() => import("./components/Pages/TrendVideos"));
 
-import { createHashRouter, Outlet } from "react-router-dom";
+import { createHashRouter, Outlet, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Provider } from 'react-redux';
@@ -26,6 +26,8 @@ const store = configureStore({
 });
 
 export default function App() {
+  const navigate = useNavigate();
+
   return (
     <Provider store={store}>
       <div className="app-container flex h-screen">
