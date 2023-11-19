@@ -20,6 +20,8 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import rootReducer from './rootReducer';
 import NewVideo from "./components/Pages/NewVideo";
+import Reset from "./components/Pages/Reset";
+import ForgotPassword from "./components/Pages/ForgotPassword";
 
 const store = configureStore({
   reducer: rootReducer
@@ -106,6 +108,16 @@ export const appRouter = createHashRouter([
       {
         path:"/newvideo",
         element:(<NewVideo/>),
+      },
+      {
+        path:"/forgotpassword",
+        element:(<ForgotPassword />)
+      },
+      {
+        path:"/resetpassword/:token",
+        element: (
+            <Reset />
+        ),
       }
     ],
   },
