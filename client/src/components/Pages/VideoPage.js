@@ -17,6 +17,7 @@ import { PiShareFat } from "react-icons/pi";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 export default function VideoPage() {
   const [videos, setVideos] = useState([]);
@@ -24,6 +25,8 @@ export default function VideoPage() {
   const dispatch = useDispatch();
 
   const [showDescription, setShowDescription] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const video = useSelector((state) => state.video.video);
   const user = useSelector((state) => state.video.user);
@@ -36,7 +39,7 @@ export default function VideoPage() {
   const isMobileScreen = window.innerWidth <= 768;
   const navigate = useNavigate();
   const api = axios.create({
-    baseURL: 'https://blue-violet-antelope-wrap.cyclic.app/api',
+    baseURL: 'http://localhost:3000/api',
     withCredentials: true,
   });
 
@@ -67,6 +70,10 @@ export default function VideoPage() {
     }
   }
 
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
+
   const setRandomVideos = async () => {
     try {
       const response = await getRandomVideos();
@@ -93,53 +100,54 @@ export default function VideoPage() {
     }
     dispatch(subUnSub(currUser.id));
   };
-// Like a video
-const handleLike = async () => {
-  try {
-    if (!currUser) {
-      console.log("User is not authenticated.");
-      return;
-    }
 
-    if (videoLikes.includes(currUser.id)) {
-      await api.put(`/videos/removeLike/${video._id}`);
-      dispatch(dislikeVideo(video._id));
-      const updatedLikes = videoLikes.filter(userId => userId !== currUser.id);
-      dispatch(setVideo({ ...video, likes: updatedLikes }));
-    } else {
-      await api.put(`/videos/like/${video._id}`);
-      dispatch(likeVideo(video._id));
-      dispatch(setVideo({ ...video, likes: [...videoLikes, currUser.id] }));
-    }
-  } catch (error) {
-    console.error('Like Request Failed:', error);
-    // Handle the error, such as displaying an error message to the user
-  }
-};
+  // Like a video
+  const handleLike = async () => {
+    try {
+      if (!currUser) {
+        console.log("User is not authenticated.");
+        return;
+      }
 
-// Dislike a video
-const handleDisLike = async () => {
-  try {
-    if (!currUser) {
-      console.log("User is not authenticated.");
-      return;
+      if (videoLikes.includes(currUser.id)) {
+        await api.put(`/videos/removeLike/${video._id}`);
+        dispatch(dislikeVideo(video._id));
+        const updatedLikes = videoLikes.filter(userId => userId !== currUser.id);
+        dispatch(setVideo({ ...video, likes: updatedLikes }));
+      } else {
+        await api.put(`/videos/like/${video._id}`);
+        dispatch(likeVideo(video._id));
+        dispatch(setVideo({ ...video, likes: [...videoLikes, currUser.id] }));
+      }
+    } catch (error) {
+      console.error('Like Request Failed:', error);
+      // Handle the error, such as displaying an error message to the user
     }
-    console.log("Video Id : "+video._id);
-    if (videoDislikes.includes(currUser.id)) {
-      await api.put(`/videos/removeDislike/${video._id}`);
-      dispatch(likeVideo(video._id));
-      const updatedDislikes = videoDislikes.filter(userId => userId !== currUser.id);
-      dispatch(setVideo({ ...video, dislikes: updatedDislikes }));
-    } else {
-      await api.put(`/videos/dislike/${video._id}`);
-      dispatch(dislikeVideo(video._id));
-      dispatch(setVideo({ ...video, dislikes: [...videoDislikes, currUser.id] }));
+  };
+
+  // Dislike a video
+  const handleDisLike = async () => {
+    try {
+      if (!currUser) {
+        console.log("User is not authenticated.");
+        return;
+      }
+      console.log("Video Id : "+video._id);
+      if (videoDislikes.includes(currUser.id)) {
+        await api.put(`/videos/removeDislike/${video._id}`);
+        dispatch(likeVideo(video._id));
+        const updatedDislikes = videoDislikes.filter(userId => userId !== currUser.id);
+        dispatch(setVideo({ ...video, dislikes: updatedDislikes }));
+      } else {
+        await api.put(`/videos/dislike/${video._id}`);
+        dispatch(dislikeVideo(video._id));
+        dispatch(setVideo({ ...video, dislikes: [...videoDislikes, currUser.id] }));
+      }
+    } catch (error) {
+      console.error('Dislike Request Failed:', error);
+      // Handle the error, such as displaying an error message to the user
     }
-  } catch (error) {
-    console.error('Dislike Request Failed:', error);
-    // Handle the error, such as displaying an error message to the user
-  }
-};
+  };
 
   //fetch video data
   const handleFetchData = async () => {
@@ -171,6 +179,7 @@ const handleDisLike = async () => {
     await handleFetchData();
     increaseView();
   };
+
   useEffect(() => {
     console.log("Curr User : ", currUser);
     fetchDataAndIncreaseView();
@@ -182,16 +191,17 @@ const handleDisLike = async () => {
 
   }, [dispatch, vID]);
 
-  return !videoUrl ? <VideoPageShimmer /> : (
-    <div className="mt-14 w-full scroll-m-3 h-screen lg:px-10 flex gap-5 sm:px-3 md:px-4 ">
-      <div className="md:w-8/12">
+  return !videoUrl ? (
+    <VideoPageShimmer />
+  ) : (
+    <div className="mt-14 w-full lg:px-10 flex flex-col lg:flex-row gap-5 sm:px-3 md:px-4">
+      <div className="lg:w-8/12 w-full order-1 lg:order-2">
         <div className="mt-4">
           {videoUrl ? (
             <video autoPlay controls preload="auto" poster={video.imgUrl} className="h-50vh rounded-2xl sm:w-full">
               <source src={videoUrl} type="video/mp4" />
               Sorry, your browser doesn't support embedded videos.
             </video>
-
           ) : (
             <p>Loading video...</p>
           )}
@@ -225,39 +235,30 @@ const handleDisLike = async () => {
             {/* Render like, dislike, and share buttons */}
             <div className="flex items-center gap-4">
               <div className="flex flex-row bg-lightblue1 rounded-3xl">
-
                 <button onClick={handleLike} className="flex flex-row rounded-l-3xl hover:bg-lightblue2">
                   {video.likes.includes(currUser.id) ? <BiSolidLike className="p-2 w-10 h-10 text-slate-400  rounded-l-3xl" /> : <BiLike className="p-2 w-10 h-10 text-slate-400  rounded-l-3xl" />}
-
                   <span className="text-slate-400 my-auto me-2 font-md">{video.likes?.length} likes</span>
                 </button>
-
                 <div className="w-0.5 h-full bg-slate-400"></div>
                 <button onClick={handleDisLike}>
                   <BiDislike className="p-2 w-10 h-10 text-slate-400 hover:bg-lightblue2 rounded-r-3xl" />
                 </button>
               </div>
-              <button className="flex flex-row justify-center items-center bg-lightblue1 rounded-3xl hover:bg-lightblue2">
-                <PiShareFat className="w-10 text-slate-400 h-10 p-2 rounded-l-3xl" />
-                <span className="text-slate-400  rounded-r-3xl pe-3 font-semibold text-lg">Share</span>
-              </button>
+              <button onClick={toggleModal} className="flex flex-row justify-center items-center bg-lightblue1 rounded-3xl hover:bg-lightblue2">
+          <PiShareFat className="w-10 text-slate-400 h-10 p-2 rounded-l-3xl" />
+          <span className="text-slate-400 rounded-r-3xl pe-3 font-semibold text-lg">Share</span>
+        </button>
             </div>
           </div>
         </div>
         {/* Render video description */}
         <div className="my-4 mx-2 whitespace-pre-wrap dark:bg-lightblue1 rounded-xl p-3 shadow-sm">
           <div className="flex flex-row w-full justify-between">
-            <h2
-              className="text-slate-300 w-fit mb-3 font-semibold cursor-pointer"
-            >
+            <h2 className="text-slate-300 w-fit mb-3 font-semibold cursor-pointer">
               Description
             </h2>
-            <h2 className={`text-slate-300 w-fit mb-3 font-regular cursor-pointer`}
-              onClick={() => setShowDescription(!showDescription)}>
-              {showDescription
-                ? <IoIosArrowUp className="rounded-full p-1 bg-darkblue2  h-7 w-7" />
-                : <IoIosArrowDown className="h-7 w-7 p-1 rounded-full bg-darkblue2" />
-              }
+            <h2 className={`text-slate-300 w-fit mb-3 font-regular cursor-pointer`} onClick={() => setShowDescription(!showDescription)}>
+              {showDescription ? <IoIosArrowUp className="rounded-full p-1 bg-darkblue2  h-7 w-7" /> : <IoIosArrowDown className="h-7 w-7 p-1 rounded-full bg-darkblue2" />}
             </h2>
           </div>
           <hr className="mb-4" />
@@ -274,16 +275,15 @@ const handleDisLike = async () => {
               </div>
             </>
           ) : null}
-
         </div>
       </div>
-      <div className=" h-full md:w-4/12 p-2 flex flex-col items-start">
+      <div className="lg:w-4/12 w-full p-2 flex flex-col items-start order-1 lg:order-2">
         <h1 className="font-bold text-3xl my-3 text-sky-600 text-archivo">Recommonded</h1>
         {videos.map((vid) => (
           <Link to={"/video/" + vid._id} key={vid._id} >
             <div className="w-full my-2 h-28 flex flex-row cursor-pointer p-1 rounded-lg">
               <img src={vid.imgUrl} key={vid._id} alt={vid.title} className="h-26 w-40 rounded-xl" />
-              <div className=" ms-4 mt-1 flex flex-col">
+              <div className="ms-4 mt-1 flex flex-col">
                 <span className="text-md font-bold text-slate-200">{vid.title}</span>
                 <span className="text-md font-semibold text-slate-500">{vid.user.name}</span>
                 <span className="text-md font-semibold text-slate-500">
@@ -294,6 +294,16 @@ const handleDisLike = async () => {
           </Link>
         ))}
       </div>
+      {showModal && (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-4 rounded-md shadow-md transition-transform scale-100 opacity-100">
+          {/* Your modal content goes here */}
+            <CopyToClipboard text={window.location.href} onCopy={() => setCopied(true)}>
+              <button className="bg-lightblue1 text-white p-2 rounded-md hover:bg-lightblue2">
+                {copied ? "Copied!" : "Copy to Clipboard"}
+              </button>
+            </CopyToClipboard>
+        </div>
+      )}
     </div>
-  )
+  );
 }
