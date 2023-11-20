@@ -52,9 +52,9 @@ export default function Body({ sidebarOpen }) {
       return <Shimmer />;
     } else if (searchActive && filterVideos.length > 0) {
       return (
-        <div className="w-full grid grid-cols-1 gap-4 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grip-cols-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4">
           {filterVideos.map((video) => (
-            <Link to={"/video/" + video._id} key={video._id}>
+            <Link to={"/video/" + video._id} key={video._id} className="flex-shrink-0">
               <VideoCard video={video} />
             </Link>
           ))}
@@ -74,6 +74,7 @@ export default function Body({ sidebarOpen }) {
       );
     }
   }
+  
 
   return (
     <div className={`body-container ${sidebarOpen ? 'ml-64' : ''} flex-grow`}>
