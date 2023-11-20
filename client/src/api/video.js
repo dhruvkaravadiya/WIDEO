@@ -1,9 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-      baseURL: "https://blue-violet-antelope-wrap.cyclic.app/api/videos", // Adjust this to match your backend API URL
+      baseURL: "http://localhost:3000/api/videos", // Adjust this to match your backend API URL
 });
-
 
 export const getRandomVideos = async () => {
       const response =  await api.get('/random');

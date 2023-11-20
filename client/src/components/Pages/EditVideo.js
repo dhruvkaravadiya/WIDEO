@@ -16,7 +16,7 @@ const EditVideo = () => {
 
   const api = axios.create({
     withCredentials:true,
-    baseURL:"https://blue-violet-antelope-wrap.cyclic.app/api/videos"
+    baseURL:"http://localhost:3000/api/videos"
   });
 
   const [newTag, setNewTag] = useState("");
@@ -184,7 +184,7 @@ const EditVideo = () => {
               value={newTag}
               onChange={(e) => setNewTag(e.target.value)}
               placeholder="Add a new tag"
-              className=" bg-darkblue2 text-slate-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
+              className=" bg-darkblue2 text-slate-300 rounded-md px-3 py-2 focus:outline-none"
             />
             <button
               type="button"
