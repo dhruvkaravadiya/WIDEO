@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import { toast } from "react-toastify";
 const AddVideo = () => {
   const navigate = useNavigate();
   const [videoDetails, setVideoDetails] = useState({
@@ -86,10 +86,10 @@ const AddVideo = () => {
 
       const api = axios.create({
         withCredentials: true,
-        baseURL: "https://blue-violet-antelope-wrap.cyclic.app/api/videos",
+        baseURL: "http://localhost:3000/api/videos",
         headers: {
           "Content-Type": "multipart/form-data",
-          Origin: "https://wideo-client.vercel.app", // Replace with your actual frontend URL
+          Origin: "http://localhost:1234", // Replace with your actual frontend URL
         },
       });
 
@@ -100,7 +100,8 @@ const AddVideo = () => {
           },
         });
         navigate("/");
-        console.log("Success Edit");
+        toast.success("Video Uploaded Successfully");
+        console.log("Video Upload Success");
       } catch (error) {
         console.error("Error updating video:", error);
       }
@@ -122,7 +123,7 @@ const AddVideo = () => {
               name="title"
               value={videoDetails.title}
               onChange={handleInputChange}
-              className="w-full bg-gray-100 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
+              className="w-full bg-darkblue2 text-slate-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
             />
           </div>
           <div className="mb-4">
@@ -134,14 +135,14 @@ const AddVideo = () => {
               name="description"
               value={videoDetails.description}
               onChange={handleInputChange}
-              className="w-full bg-gray-100 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500 resize-none h-48"
+              className="w-full bg-darkblue2 text-slate-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500 resize-none h-48"
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="tags" className="block text-gray-600 font-semibold mb-2">
+            <label htmlFor="tags" className="block text-gray-600 font-semibold">
               Tags:
             </label>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap">
               {videoDetails.tags.map((tag, index) => (
                 <div key={index} className="bg-blue-500 text-white rounded-full px-3 py-1 flex items-center">
                   {tag}
@@ -168,7 +169,7 @@ const AddVideo = () => {
               value={videoDetails.newTag}
               onChange={handleInputChange}
               placeholder="Add a new tag"
-              className="w-full bg-gray-100 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
+              className="w-full bg-darkblue2 text-slate-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
             />
             <button
               type="button"
@@ -190,7 +191,7 @@ const AddVideo = () => {
               name="photo"
               accept="image/*"
               onChange={handlephotoUpload}
-              className="w-full bg-gray-100 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
+              className="w-full bg-darkblue2 text-slate-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
             />
             {videoDetails.photo && (
               <img
@@ -210,7 +211,7 @@ const AddVideo = () => {
               name="video"
               accept="video/*"
               onChange={handleVideoUpload}
-              className="w-full bg-gray-100 text-gray-800 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
+              className="w-full bg-darkblue2 text-slate-300 rounded-md px-3 py-2 focus:outline-none focus:border-blue-500"
             />
           </div>
         </div>
