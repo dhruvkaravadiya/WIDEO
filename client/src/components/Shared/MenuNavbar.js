@@ -29,6 +29,7 @@ function MenuNavbar() {
     const response = await logoutUser();
     dispatch(logout());
     localStorage.removeItem("userData");
+    navigate('/');
     console.log(response);
   };
 
@@ -101,14 +102,12 @@ function MenuNavbar() {
 
                 {accountDropdownOpen && (
                   <div className="absolute bg-[#222f46] right-0 w-auto h-auto border dark:border-gray-700 rounded-lg shadow-lg">
-                    <div className="p-2 flex flex-col text-white">
+                    <div className="p-2 flex flex-col gap-2 text-white">
                       <span className="font-archivo text-sm">{user.name}</span>
                       <span className="font-archivo text-sm">{user.email}</span>
                     </div>
                     <hr className="mt-1" />
-                    <div className="p-2 text-white hover:bg-slate-700"></div>
-                    <hr className="text-black mt-1" />
-                    <button onClick={handleLogout} className="p-2 text-red-500 font-bold hover:bg-slate-700">
+                    <button onClick={handleLogout} className="p-2 w-full text-red-500 font-bold hover:bg-red-500 hover:text-slate-700 rounded-bl-lg rounded-br-lg">
                       Logout
                     </button>
                   </div>
@@ -163,55 +162,7 @@ function MenuNavbar() {
                 <span className="ml-3">Trending</span>
               </Link>
             </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <MdSubscriptions
-                  className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 22 21"
-                />
-                <span className="flex-1 ml-3 whitespace-nowrap">
-                  Subscriptions
-                </span>
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <BiLibrary
-                  className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 22 21"
-                />
-
-                <span className="flex-1 ml-3 whitespace-nowrap">Library</span>
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <MdHistory
-                  className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 22 21"
-                />
-
-                <span className="flex-1 ml-3 whitespace-nowrap">History</span>
-              </a>
-            </li>
+           
             <li>
               <Link
                 to="/yourvideos"
@@ -231,54 +182,7 @@ function MenuNavbar() {
                 </span>
               </Link>
             </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <MdWatchLater
-                  className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 22 22"
-                />
-
-                <span className="flex-1 ml-3 whitespace-nowrap">
-                  Watch Later
-                </span>
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <BiSolidLike
-                  className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 22 21"
-                />
-                <span className="ml-3">Liked Videos</span>
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <RiSettings4Fill
-                  className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 22 21"
-                />
-                <span className="flex-1 ml-3 whitespace-nowrap">Settings</span>
-              </a>
-            </li>
+           
             <li>
               <Link
                 to="/feedback"
