@@ -104,6 +104,8 @@ export default function VideoPage() {
     const handleLike = async () => {
         try {
             if (!currUser) {
+                navigate("/login");
+                toast.info("Login to Access this feature");
                 console.log("User is not authenticated.");
                 return;
             }
@@ -132,6 +134,8 @@ export default function VideoPage() {
     const handleDisLike = async () => {
         try {
             if (!currUser) {
+                navigate("/login");
+                toast.info("Login to Access this feature");
                 console.log("User is not authenticated.");
                 return;
             }
@@ -155,7 +159,6 @@ export default function VideoPage() {
             }
         } catch (error) {
             console.error("Dislike Request Failed:", error);
-            // Handle the error, such as displaying an error message to the user
         }
     };
 
@@ -177,7 +180,6 @@ export default function VideoPage() {
             dispatch(setUser(userData));
         } catch (error) {
             console.error("Error fetching video details:", error);
-            // Make sure to finish loading in case of an error
         }
     };
 
