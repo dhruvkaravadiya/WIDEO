@@ -102,63 +102,54 @@ export default function VideoPage() {
 
     // Like a video
     const handleLike = async () => {
-        try {
-            if (!currUser) {
-                navigate("/login");
-                toast.info("Login to Access this feature");
-                console.log("User is not authenticated.");
-                return;
-            }
+        if (!currUser) {
+            navigate("/login");
+            toast.info("Login to Access this feature");
+            console.log("User is not authenticated.");
+            return;
+        }
 
-            if (videoLikes.includes(currUser.id)) {
-                await api.put(`/videos/removeLike/${video._id}`);
-                dispatch(dislikeVideo(video._id));
-                const updatedLikes = videoLikes.filter(
-                    (userId) => userId !== currUser.id
-                );
-                dispatch(setVideo({ ...video, likes: updatedLikes }));
-            } else {
-                await api.put(`/videos/like/${video._id}`);
-                dispatch(likeVideo(video._id));
-                dispatch(
-                    setVideo({ ...video, likes: [...videoLikes, currUser.id] })
-                );
-            }
-        } catch (error) {
-            console.error("Like Request Failed:", error);
-            // Handle the error, such as displaying an error message to the user
+        if (videoLikes.includes(currUser.id)) {
+            await api.put(`/videos/removeLike/${video._id}`);
+            dispatch(dislikeVideo(video._id));
+            const updatedLikes = videoLikes.filter(
+                (userId) => userId !== currUser.id
+            );
+            dispatch(setVideo({ ...video, likes: updatedLikes }));
+        } else {
+            await api.put(`/videos/like/${video._id}`);
+            dispatch(likeVideo(video._id));
+            dispatch(
+                setVideo({ ...video, likes: [...videoLikes, currUser.id] })
+            );
         }
     };
 
     // Dislike a video
     const handleDisLike = async () => {
-        try {
-            if (!currUser) {
-                navigate("/login");
-                toast.info("Login to Access this feature");
-                console.log("User is not authenticated.");
-                return;
-            }
-            console.log("Video Id : " + video._id);
-            if (videoDislikes.includes(currUser.id)) {
-                await api.put(`/videos/removeDislike/${video._id}`);
-                dispatch(likeVideo(video._id));
-                const updatedDislikes = videoDislikes.filter(
-                    (userId) => userId !== currUser.id
-                );
-                dispatch(setVideo({ ...video, dislikes: updatedDislikes }));
-            } else {
-                await api.put(`/videos/dislike/${video._id}`);
-                dispatch(dislikeVideo(video._id));
-                dispatch(
-                    setVideo({
-                        ...video,
-                        dislikes: [...videoDislikes, currUser.id],
-                    })
-                );
-            }
-        } catch (error) {
-            console.error("Dislike Request Failed:", error);
+        if (!currUser) {
+            navigate("/login");
+            toast.info("Login to Access this feature");
+            console.log("User is not authenticated.");
+            return;
+        }
+        console.log("Video Id : " + video._id);
+        if (videoDislikes.includes(currUser.id)) {
+            await api.put(`/videos/removeDislike/${video._id}`);
+            dispatch(likeVideo(video._id));
+            const updatedDislikes = videoDislikes.filter(
+                (userId) => userId !== currUser.id
+            );
+            dispatch(setVideo({ ...video, dislikes: updatedDislikes }));
+        } else {
+            await api.put(`/videos/dislike/${video._id}`);
+            dispatch(dislikeVideo(video._id));
+            dispatch(
+                setVideo({
+                    ...video,
+                    dislikes: [...videoDislikes, currUser.id],
+                })
+            );
         }
     };
 
