@@ -377,7 +377,10 @@ export default function VideoPage() {
                     {/* Your modal content goes here */}
                     <CopyToClipboard
                         text={window.location.href}
-                        onCopy={() => setCopied(true)}
+                        onCopy={() => {
+                            setCopied(true);
+                            setShowModal(false);
+                        }}
                     >
                         <button className="bg-lightblue1 text-white p-2 rounded-md hover:bg-lightblue2">
                             {copied ? "Copied!" : "Copy to Clipboard"}
