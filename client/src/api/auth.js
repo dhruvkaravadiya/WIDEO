@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "https://wideo-api.up.railway.app/api/auth", // Adjust this to match your backend API URL
+    baseURL: "https://wideo-api-production.up.railway.app/api/auth", // Adjust this to match your backend API URL
     withCredentials: true,
 });
 
