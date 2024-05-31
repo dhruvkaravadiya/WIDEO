@@ -12,7 +12,7 @@ const YourVideos = () => {
     const currUser = useSelector((state) => state.auth.user);
     const [videos, setVideos] = useState([]);
     const api = axios.create({
-        baseURL: "https://wideo-api.up.railway.app/api/videos",
+        baseURL: "https://wideo-api-production.up.railway.app/api/videos",
         withCredentials: true,
     });
     const getUserVideos = async () => {
