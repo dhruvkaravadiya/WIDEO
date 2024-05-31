@@ -159,11 +159,11 @@ export default function VideoPage() {
         console.log(user);
         try {
             const videoRes = await fetch(
-                "https://wideo-api.up.railway.app/api/videos/find/" + vID
+                "https://wideo-api-production.up.railway.app/api/videos/find/" + vID
             );
             const videoData = await videoRes.json();
             const userRes = await fetch(
-                "https://wideo-api.up.railway.app/api/users/find/" +
+                "https://wideo-api-production.up.railway.app/api/users/find/" +
                     videoData.user.id
             );
             const userData = await userRes.json();
