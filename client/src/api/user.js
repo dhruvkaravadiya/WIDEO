@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "https://wideo-api.up.railway.app/api/users",
+    baseURL: "https://wideo-api-production.up.railway.app/api/users",
     withCredentials: true,
 });
 
