@@ -16,7 +16,7 @@ const EditVideo = () => {
 
     const api = axios.create({
         withCredentials: true,
-        baseURL: "https://wideo-api.up.railway.app/api/videos",
+        baseURL: "https://wideo-api-production.up.railway.app/api/videos",
     });
 
     const [newTag, setNewTag] = useState("");
